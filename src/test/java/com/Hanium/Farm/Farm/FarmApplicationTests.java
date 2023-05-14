@@ -1,0 +1,13 @@
+package com.Hanium.Farm.Farm;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class FarmApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
