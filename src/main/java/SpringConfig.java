@@ -1,5 +1,5 @@
-import Domain.Member;
 import Repository.MemberRepository;
+import Repository.MemberRepositoryInterface;
 import Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,8 @@ import javax.sql.DataSource;
 
 @Configuration
 public class SpringConfig {
-    private DataSource dataSource;
+    private final DataSource dataSource;
+
     @Autowired
     public SpringConfig(DataSource dataSource){
         // dataSource를 spring bean으로 등록
@@ -17,13 +18,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public MemberRepository memberRepository(){
-        return new MemberRepository();
+    public MemberRepositoryInterface memberRepositoryInteface(){
+        return new MemberRepository(dataSource);
     }
 
     @Bean
     public MemberService memberService(){
-        return new MemberService(memberRepository());
+        return new MemberService(memberRepositoryInteface());
     }
 
 
