@@ -1,7 +1,6 @@
 package com.Hanium.Farm.Farm.RepositoryTest;
 
-import Repository.MemberRepository;
-import Repository.MemberRepositoryInterface;
+import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

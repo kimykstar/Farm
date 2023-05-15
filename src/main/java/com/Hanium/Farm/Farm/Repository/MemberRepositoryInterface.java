@@ -1,6 +1,6 @@
-package Repository;
+package com.Hanium.Farm.Farm.Repository;
 
-import Domain.Member;
+import com.Hanium.Farm.Farm.Domain.Member;
 
 import java.util.Optional;
 

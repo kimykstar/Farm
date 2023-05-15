@@ -1,4 +1,4 @@
-package Domain;
+package com.Hanium.Farm.Farm.Domain;
 
 public class Member {
 

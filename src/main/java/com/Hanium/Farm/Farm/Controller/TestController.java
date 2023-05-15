@@ -1,11 +1,10 @@
-package Controller;
+package com.Hanium.Farm.Farm.Controller;
 
-import Service.MemberService;
-import org.springframework.stereotype.Controller;
+import com.Hanium.Farm.Farm.Service.MemberService;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 public class TestController {
     private final MemberService memberService;
     public TestController(MemberService memberService){
@@ -19,7 +18,6 @@ public class TestController {
     @RequestMapping(value = "/test")
     public String getPWTest(@RequestParam String id, Model model){
         String result = memberService.getPw(id);
-        model.addAttribute("result : ", result);
-        return "result";
+        return result;
     }
 }

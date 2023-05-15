@@ -1,6 +1,8 @@
-import Repository.MemberRepository;
-import Repository.MemberRepositoryInterface;
-import Service.MemberService;
+package com.Hanium.Farm.Farm;
+
+import com.Hanium.Farm.Farm.Repository.MemberRepository;
+import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
+import com.Hanium.Farm.Farm.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

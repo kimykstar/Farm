@@ -1,6 +1,6 @@
-package Service;
+package com.Hanium.Farm.Farm.Service;
 
-import Repository.MemberRepositoryInterface;
+import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;

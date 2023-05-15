@@ -1,6 +1,6 @@
-package Repository;
+package com.Hanium.Farm.Farm.Repository;
 
-import Domain.Member;
+import com.Hanium.Farm.Farm.Domain.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -44,8 +44,8 @@ public class MemberRepository implements MemberRepositoryInterface {
 
     @Override
     public String getPwHash(String id) {
-        List<String> result = jdbcTemplate.query("SELECT pw FROM farm WHERE id = ?", pwRowMapper(), id);
-        return result.get(0);
+        List<String> result = jdbcTemplate.query("SELECT pw FROM user WHERE id = ?", pwRowMapper(), id);
+        return result.get(0); // indexOutOfBoundsException에러 잡기
     }
 
     private RowMapper<String> pwRowMapper(){
