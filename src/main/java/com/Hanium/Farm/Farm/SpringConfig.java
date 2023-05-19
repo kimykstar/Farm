@@ -29,5 +29,4 @@ public class SpringConfig {
         return new MemberService(memberRepositoryInteface());
     }
 
-
 }
