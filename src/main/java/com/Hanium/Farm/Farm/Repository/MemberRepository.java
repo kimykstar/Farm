@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +25,15 @@ public class MemberRepository implements MemberRepositoryInterface {
     }
 
     @Override
-    public boolean join(Member member) {
+    public void join(Member member) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("farm").usingGeneratedKeyColumns("id");
+
+        jdbcTemplate.update(
+                "INSERT INTO user VALUES (?, ?, ?, ?, ?);"
+                , member.getId(), member.getPw(), member.getName(), member.getPhone(), member.getAge());
 
 
-        return false;
+//        return false;
     }
 
     @Override
@@ -43,15 +47,24 @@ public class MemberRepository implements MemberRepositoryInterface {
     }
 
     @Override
-    public String getPwHash(String id) {
-        List<String> result = jdbcTemplate.query("SELECT pw FROM user WHERE id = ?", pwRowMapper(), id);
-        return result.get(0); // indexOutOfBoundsException에러 잡기
+    public Member getMember(String id) {
+        List<String> result = jdbcTemplate.query("SELECT * FROM user WHERE id = ?", pwRowMapper(), id);
+        String memberInfo = result.get(0);
+        String[] info = memberInfo.split(" ");
+        Member member = new Member(info[0], info[1], info[2], info[3], Integer.parseInt(info[4]));
+        return member; // indexOutOfBoundsException에러 잡기
     }
 
     private RowMapper<String> pwRowMapper(){
         return (rs, rowNum) -> {
-            String result = "None";
-            result = rs.getString("pw");
+            String result = null;
+            StringBuilder temp = null;
+            temp = new StringBuilder(rs.getString("id"));
+            temp.append(" " + rs.getString("pw"));
+            temp.append(" " + rs.getString("name"));
+            temp.append(" " + rs.getString("phone_num"));
+            temp.append(" " + rs.getString("age"));
+            result = temp.toString();
             return result;
         };
     }

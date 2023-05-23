@@ -8,6 +8,14 @@ public class Member {
     private String phone;
     private int age;
 
+    public Member(String id, String pw, String name, String phone, int age){
+        this.id = id;
+        this.pw = pw;
+        this.name = name;
+        this.phone = phone;
+        this.age = age;
+    }
+
     public void setAge(int age) {
         this.age = age;
     }

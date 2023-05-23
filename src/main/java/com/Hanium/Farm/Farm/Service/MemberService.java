@@ -1,5 +1,6 @@
 package com.Hanium.Farm.Farm.Service;
 
+import com.Hanium.Farm.Farm.Domain.Member;
 import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +24,8 @@ public class MemberService {
 //        String hash = String.format("%064x", new BigInteger(1, pwHash.digest()));
 
         // 여기 memberRepository이용
-        String hash_pw = memberRepository.getPwHash(id);
+        Member member = memberRepository.getMember(id);
+        String hash_pw = member.getPw();
 
         if(pw.equals(hash_pw))
             result = true;
@@ -31,9 +33,16 @@ public class MemberService {
         return result;
     }
 
+    public void join(Member member){
+//        boolean result = false;
+        memberRepository.join(member);
+//        return result;
+    }
+
     public String getPw(String id){
         String pw;
-        pw = memberRepository.getPwHash(id);
+        Member member = memberRepository.getMember(id);
+        pw = member.getPw();
         return pw;
     }
 
