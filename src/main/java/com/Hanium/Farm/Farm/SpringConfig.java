@@ -1,7 +1,10 @@
 package com.Hanium.Farm.Farm;
 
+import com.Hanium.Farm.Farm.Repository.FruitRepository;
+import com.Hanium.Farm.Farm.Repository.FruitRepositoryInterface;
 import com.Hanium.Farm.Farm.Repository.MemberRepository;
 import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
+import com.Hanium.Farm.Farm.Service.FruitService;
 import com.Hanium.Farm.Farm.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -29,4 +32,9 @@ public class SpringConfig {
         return new MemberService(memberRepositoryInteface());
     }
 
+    @Bean
+    public FruitRepositoryInterface fruitRepositoryInterface(){return new FruitRepository(dataSource);}
+
+    @Bean
+    public FruitService fruitService (){return new FruitService(fruitRepositoryInterface());}
 }
