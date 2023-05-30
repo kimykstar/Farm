@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 public class FruitRepository implements FruitRepositoryInterface{
 
@@ -18,8 +19,11 @@ public class FruitRepository implements FruitRepositoryInterface{
 
     @Override
     public Fruit getFruitInfo(String fruit) {
-        jdbcTemplate.query("SELECT * FROM fruits WHERE fruit_name=?;", pwRowMapper(), fruit);
-        return null;
+        List<Fruit> infos = jdbcTemplate.query("SELECT * FROM fruits WHERE fruit_name=?;", pwRowMapper(), fruit);
+
+        Fruit info = infos.get(0);
+
+        return info;
     }
 
     private RowMapper<Fruit> pwRowMapper(){

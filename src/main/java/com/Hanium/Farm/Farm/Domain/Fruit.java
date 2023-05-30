@@ -70,4 +70,11 @@ public class Fruit {
         return sugar;
     }
 
+    public void toString(Fruit fruit){
+        System.out.println("fruit_name : " + fruit.getFruit_name()
+                + ", calories : " + fruit.getCalories() + ", carbohydrate : " + fruit.getCarbohydrate()
+                + ", protein : " + fruit.getCarbohydrate() + ", fat : " + fruit.getFat()
+                + ", sugar : " + fruit.getSugar());
+    }
+
 }

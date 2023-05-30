@@ -20,9 +20,9 @@ public class FruitController {
 
     @GetMapping("/search")
     @ResponseBody
-    public Fruit getFruitInfo(@RequestParam String fruit){
-        fruitService.getFruitInfo(fruit);
+    public Fruit getFruitInfo(@RequestParam String fruit){ // 과일의 정보를 받아 client로 보내준다.
+        Fruit info = fruitService.getFruitInfo(fruit);
 
-        return null;
+        return info;
     }
 }
