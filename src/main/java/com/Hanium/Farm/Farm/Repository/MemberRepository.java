@@ -31,9 +31,6 @@ public class MemberRepository implements MemberRepositoryInterface {
         jdbcTemplate.update(
                 "INSERT INTO user VALUES (?, ?, ?, ?, ?);"
                 , member.getId(), member.getPw(), member.getName(), member.getPhone(), member.getAge());
-
-
-//        return false;
     }
 
     @Override
