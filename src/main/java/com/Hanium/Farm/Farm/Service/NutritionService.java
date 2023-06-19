@@ -23,7 +23,6 @@ public class NutritionService {
         Iterator<Nutrition> it = infos.iterator();
         while(it.hasNext()){
             Nutrition n = it.next();
-            log.info(n.getNutrition());
         }
         return infos;
     }

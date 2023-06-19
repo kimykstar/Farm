@@ -21,7 +21,7 @@ public class NutritionServiceTest {
         Iterator iter = infos.iterator();
         while(iter.hasNext()){
             Nutrition n = (Nutrition)iter.next();
-            System.out.println(n.getNutrition() + ", " + n.getAmount());
+            System.out.println(n.getNutrition() + ", " + n.getAmount() + ", " + n.getEffect());
         }
     }
 }

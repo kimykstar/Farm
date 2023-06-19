@@ -1,7 +1,6 @@
 package com.Hanium.Farm.Farm.Controller;
 
 import com.Hanium.Farm.Farm.Domain.FruitInfo;
-import com.Hanium.Farm.Farm.Domain.Nutrition;
 import com.Hanium.Farm.Farm.Service.NutritionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
 
 @RestController
 public class NutritionController {
