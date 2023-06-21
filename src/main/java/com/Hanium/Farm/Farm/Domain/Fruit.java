@@ -7,10 +7,17 @@ public class Fruit {
     private String protein;
     private String fat;
     private String sugar;
+    private FruitInfo fruitInfo;
+
 
     // constructor ----------------------------
 
     public Fruit(){}
+
+    public FruitInfo getFruitInfo() {
+        return fruitInfo;
+    }
+
     public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar){
         this.fruit_name = fruit_name;
         this.calories = calories;
@@ -18,6 +25,16 @@ public class Fruit {
         this.protein = protein;
         this.fat = fat;
         this.sugar = sugar;
+    }
+
+    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar, FruitInfo fruitInfo){
+        this.fruit_name = fruit_name;
+        this.calories = calories;
+        this.carbohydrate = carbohydrate;
+        this.protein = protein;
+        this.fat = fat;
+        this.sugar = sugar;
+        this.fruitInfo = fruitInfo;
     }
 
     // getter and setter-------------------
@@ -70,11 +87,8 @@ public class Fruit {
         return sugar;
     }
 
-    public void toString(Fruit fruit){
-        System.out.println("fruit_name : " + fruit.getFruit_name()
-                + ", calories : " + fruit.getCalories() + ", carbohydrate : " + fruit.getCarbohydrate()
-                + ", protein : " + fruit.getCarbohydrate() + ", fat : " + fruit.getFat()
-                + ", sugar : " + fruit.getSugar());
+    public void setFruitInfo(FruitInfo fruitInfo) {
+        this.fruitInfo = fruitInfo;
     }
 
 }

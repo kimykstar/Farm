@@ -4,6 +4,8 @@ import com.Hanium.Farm.Farm.Domain.Fruit;
 import com.Hanium.Farm.Farm.Repository.FruitRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.logging.Logger;
+
 public class FruitService {
 
     FruitRepositoryInterface fruitRepository;
@@ -14,8 +16,9 @@ public class FruitService {
     }
 
     public Fruit getFruitInfo(String fruit){
-        return fruitRepository.getFruitInfo(fruit);
+        Fruit info = fruitRepository.getFruitInfo(fruit);
+//        info.setFruitInfo(fruitRepository.getNutritionInfo(fruit));
+        return info;
     }
-
 
 }

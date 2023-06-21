@@ -20,10 +20,6 @@ public class NutritionService {
 
     public FruitInfo getAllInfos(String f_name){
         FruitInfo infos = nutritionInterface.getNutritionInfos(f_name);
-        Iterator<Nutrition> it = infos.iterator();
-        while(it.hasNext()){
-            Nutrition n = it.next();
-        }
         return infos;
     }
 }
