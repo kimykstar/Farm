@@ -11,8 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 public class FruitRepository implements FruitRepositoryInterface{
@@ -46,7 +44,7 @@ public class FruitRepository implements FruitRepositoryInterface{
 
     @Override
     public FruitInfo getNutritionInfo(String fruit) {
-        List<Nutrition> i = jdbcTemplate.query("SELECT * FROM fn_table INNER JOIN effective ON fn_table.nutrition=effective.nutrition WHERE fruit_name=? and amount > 0 ORDER BY amount DESC;", nuRowMapper(), fruit);
+        List<Nutrition> i = jdbcTemplate.query("SELECT * FROM fn_table INNER JOIN effective ON fn_table.nutrition=effective.nutrition WHERE fruit_name=? and amount > 0;", nuRowMapper(), fruit);
         ArrayList<Nutrition> temp = new ArrayList<>(i);
         FruitInfo infos = new FruitInfo(fruit);
         infos.setInfoList(temp);
@@ -64,4 +62,18 @@ public class FruitRepository implements FruitRepositoryInterface{
             return info;
         };
     }
+
+    // 제철 기간에 맞는 과일들의 List를 반환한다.
+    @Override
+    public ArrayList<String> getPeriodFruit(int month) {
+        List<String> fruits = jdbcTemplate.query("SELECT fruit_name FROM period WHERE start <= ? and end >= ?;", peRowMapper(), month, month);
+        ArrayList<String> result = new ArrayList<>(fruits);
+        return result;
+    }
+
+    private RowMapper<String> peRowMapper(){
+        return (rs, rowNum) -> {
+            return rs.getString("fruit_name");
+        };
+    };
 }

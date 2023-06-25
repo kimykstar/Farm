@@ -3,7 +3,6 @@ package com.Hanium.Farm.Farm;
 import com.Hanium.Farm.Farm.Repository.*;
 import com.Hanium.Farm.Farm.Service.FruitService;
 import com.Hanium.Farm.Farm.Service.MemberService;
-import com.Hanium.Farm.Farm.Service.NutritionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,9 +35,5 @@ public class SpringConfig {
     @Bean
     public FruitService fruitService (){return new FruitService(fruitRepositoryInterface());}
 
-    @Bean
-    public NutritionInterface nutritionInterface(){return new NutritionRepository(dataSource);}
 
-    @Bean
-    public NutritionService nutritionService(){return new NutritionService(nutritionInterface());}
 }

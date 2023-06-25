@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+
 @RestController
 public class FruitController {
 
@@ -32,5 +34,15 @@ public class FruitController {
         String temp = gson.toJson(info);
         log.info(temp);
         return temp;
+    }
+
+    @GetMapping("/period")
+    @ResponseBody
+    public ArrayList<String> getPeriodFruits(@RequestParam int month){
+        ArrayList<String> fruits =  fruitService.getPeriodFruits(month);
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//
+//        String result = gson.toJson(fruits);
+        return fruits;
     }
 }

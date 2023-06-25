@@ -2,7 +2,6 @@ package com.Hanium.Farm.Farm.RepositoryTest;
 
 import com.Hanium.Farm.Farm.Domain.FruitInfo;
 import com.Hanium.Farm.Farm.Domain.Nutrition;
-import com.Hanium.Farm.Farm.Repository.NutritionInterface;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

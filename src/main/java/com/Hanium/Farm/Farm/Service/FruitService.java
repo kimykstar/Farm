@@ -4,6 +4,7 @@ import com.Hanium.Farm.Farm.Domain.Fruit;
 import com.Hanium.Farm.Farm.Repository.FruitRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class FruitService {
@@ -19,6 +20,11 @@ public class FruitService {
         Fruit info = fruitRepository.getFruitInfo(fruit);
 //        info.setFruitInfo(fruitRepository.getNutritionInfo(fruit));
         return info;
+    }
+
+    public ArrayList<String> getPeriodFruits(int month){
+        ArrayList<String> fruits = fruitRepository.getPeriodFruit(month);
+        return fruits;
     }
 
 }
