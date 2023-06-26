@@ -8,6 +8,7 @@ public class Fruit {
     private String fat;
     private String sugar;
     private FruitInfo fruitInfo;
+    private String file_name;
 
 
     // constructor ----------------------------
@@ -18,8 +19,10 @@ public class Fruit {
         return fruitInfo;
     }
 
-    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar){
+
+    public Fruit(String fruit_name, String file_name, String calories, String carbohydrate, String protein, String fat, String sugar){ // FruitIfo를 받지 않는 생성자
         this.fruit_name = fruit_name;
+        this.file_name = file_name;
         this.calories = calories;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
@@ -27,9 +30,10 @@ public class Fruit {
         this.sugar = sugar;
     }
 
-    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar, FruitInfo fruitInfo){
+    public Fruit(String fruit_name,String file_name, String calories, String carbohydrate, String protein, String fat, String sugar, FruitInfo fruitInfo){ // fruitinfo를 받는 생성자
         this.fruit_name = fruit_name;
         this.calories = calories;
+        this.file_name = file_name;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fat = fat;
@@ -89,6 +93,14 @@ public class Fruit {
 
     public void setFruitInfo(FruitInfo fruitInfo) {
         this.fruitInfo = fruitInfo;
+    }
+
+    public String getFile_name() {
+        return file_name;
+    }
+
+    public void setFile_name(String file_name) {
+        this.file_name = file_name;
     }
 
 }

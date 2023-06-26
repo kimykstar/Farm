@@ -34,7 +34,7 @@ public class FruitRepository implements FruitRepositoryInterface{
     private RowMapper<Fruit> pwRowMapper(FruitInfo fruitInfo){
         return (rs, rowNum) -> {
             Fruit fruit = null;
-            fruit = new Fruit(rs.getString("fruit_name"), rs.getString("calories"),
+            fruit = new Fruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getString("calories"),
                     rs.getString("carbohydrate"), rs.getString("protein"),
                     rs.getString("fat"), rs.getString("sugar"), fruitInfo);
 
@@ -66,14 +66,14 @@ public class FruitRepository implements FruitRepositoryInterface{
     // 제철 기간에 맞는 과일들의 List를 반환한다.
     @Override
     public ArrayList<String> getPeriodFruit(int month) {
-        List<String> fruits = jdbcTemplate.query("SELECT fruit_name FROM period WHERE start <= ? and end >= ?;", peRowMapper(), month, month);
+        List<String> fruits = jdbcTemplate.query("SELECT period.fruit_name, fruits.file_name FROM period INNER JOIN fruits ON fruits.fruit_name=period.fruit_name WHERE start <= ? and end >= ?;", peRowMapper(), month, month);
         ArrayList<String> result = new ArrayList<>(fruits);
         return result;
     }
 
     private RowMapper<String> peRowMapper(){
         return (rs, rowNum) -> {
-            return rs.getString("fruit_name");
+            return rs.getString("fruit_name") + "," + rs.getString("file_name");
         };
     };
 }

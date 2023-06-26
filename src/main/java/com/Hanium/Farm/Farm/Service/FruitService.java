@@ -18,7 +18,7 @@ public class FruitService {
 
     public Fruit getFruitInfo(String fruit){
         Fruit info = fruitRepository.getFruitInfo(fruit);
-//        info.setFruitInfo(fruitRepository.getNutritionInfo(fruit));
+
         return info;
     }
 

@@ -40,9 +40,7 @@ public class FruitController {
     @ResponseBody
     public ArrayList<String> getPeriodFruits(@RequestParam int month){
         ArrayList<String> fruits =  fruitService.getPeriodFruits(month);
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//
-//        String result = gson.toJson(fruits);
+
         return fruits;
     }
 }
