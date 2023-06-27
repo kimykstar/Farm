@@ -3,6 +3,7 @@ package com.Hanium.Farm.Farm.Repository;
 import com.Hanium.Farm.Farm.Domain.Fruit;
 import com.Hanium.Farm.Farm.Domain.FruitInfo;
 import com.Hanium.Farm.Farm.Domain.Nutrition;
+import com.Hanium.Farm.Farm.Domain.PeriodFruit;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,15 +66,16 @@ public class FruitRepository implements FruitRepositoryInterface{
 
     // 제철 기간에 맞는 과일들의 List를 반환한다.
     @Override
-    public ArrayList<String> getPeriodFruit(int month) {
-        List<String> fruits = jdbcTemplate.query("SELECT period.fruit_name, fruits.file_name FROM period INNER JOIN fruits ON fruits.fruit_name=period.fruit_name WHERE start <= ? and end >= ?;", peRowMapper(), month, month);
-        ArrayList<String> result = new ArrayList<>(fruits);
+    public ArrayList<PeriodFruit> getPeriodFruit(int month) {
+        List<PeriodFruit> fruits = jdbcTemplate.query("SELECT period.fruit_name, fruits.file_name, period.start, period.end FROM period INNER JOIN fruits ON fruits.fruit_name=period.fruit_name WHERE start <= ? and end >= ?;", peRowMapper(), month, month);
+        ArrayList<PeriodFruit> result = new ArrayList<>(fruits);
         return result;
     }
 
-    private RowMapper<String> peRowMapper(){
+    private RowMapper<PeriodFruit> peRowMapper(){
         return (rs, rowNum) -> {
-            return rs.getString("fruit_name") + "," + rs.getString("file_name");
+//            return rs.getString("fruit_name") + "," + rs.getString("file_name");
+            return new PeriodFruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getInt("start"), rs.getInt("end"));
         };
     };
 }
