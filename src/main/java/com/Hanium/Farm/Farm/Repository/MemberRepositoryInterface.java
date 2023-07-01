@@ -13,7 +13,7 @@ public interface MemberRepositoryInterface {
     // 회원정보 수정
     boolean update(Member member);
     // 회원 탈퇴
-    boolean delete(Member member);
+    boolean delete(String id);
     // 사용자 정보 조회
     Member getMember(String id);
 

@@ -70,4 +70,12 @@ public class MemberController {
 
         return true;
     }
+
+    @GetMapping(value="/delete")
+    public boolean delete(@RequestParam String id){
+        boolean result = memberService.delete(id);
+        System.out.println(id);
+        return result;
+    }
+
 }

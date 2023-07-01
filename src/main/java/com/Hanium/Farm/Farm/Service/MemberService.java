@@ -42,4 +42,8 @@ public class MemberService {
         return pw;
     }
 
+    public boolean delete(String id){
+        boolean result = memberRepository.delete(id);
+        return result;
+    }
 }

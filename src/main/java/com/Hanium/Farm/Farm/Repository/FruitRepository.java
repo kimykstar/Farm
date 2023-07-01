@@ -74,7 +74,6 @@ public class FruitRepository implements FruitRepositoryInterface{
 
     private RowMapper<PeriodFruit> peRowMapper(){
         return (rs, rowNum) -> {
-//            return rs.getString("fruit_name") + "," + rs.getString("file_name");
             return new PeriodFruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getInt("start"), rs.getInt("end"));
         };
     };

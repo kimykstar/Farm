@@ -39,8 +39,14 @@ public class MemberRepository implements MemberRepositoryInterface {
     }
 
     @Override
-    public boolean delete(Member member) {
-        return false;
+    public boolean delete(String id) {
+        int count = jdbcTemplate.update("DELETE FROM user WHERE id = ?", id);
+        boolean result = false;
+        if(count == 0){
+            result = false;
+        }else
+            result = true;
+        return result;
     }
 
     @Override
