@@ -41,7 +41,7 @@ public class FruitController {
     @ResponseBody
     public ArrayList<PeriodFruit> getPeriodFruits(@RequestParam int month){
         ArrayList<PeriodFruit> fruits =  fruitService.getPeriodFruits(month);
-
+        System.out.println(month);
         return fruits;
     }
 }
