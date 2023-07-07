@@ -1,9 +1,6 @@
 package com.Hanium.Farm.Farm.Repository;
 
-import com.Hanium.Farm.Farm.Domain.Fruit;
-import com.Hanium.Farm.Farm.Domain.FruitInfo;
-import com.Hanium.Farm.Farm.Domain.Nutrition;
-import com.Hanium.Farm.Farm.Domain.PeriodFruit;
+import com.Hanium.Farm.Farm.Domain.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FruitRepository implements FruitRepositoryInterface{
@@ -72,9 +70,32 @@ public class FruitRepository implements FruitRepositoryInterface{
         return result;
     }
 
+
     private RowMapper<PeriodFruit> peRowMapper(){
         return (rs, rowNum) -> {
             return new PeriodFruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getInt("start"), rs.getInt("end"));
         };
     };
+
+    @Override
+    public ArrayList<RecommendFruit> getRecommendFruit(String[] nutritions) {
+        ArrayList<RecommendFruit> result = new ArrayList<>();
+        // 한 영양소에 대한 과일의 정보 배열을 받는다.
+        for(String s : nutritions){
+            List<RecommendFruit> fruits =
+                    jdbcTemplate.query("SELECT fruits.fruit_name, file_name, nutrition FROM fruits LEFT JOIN fn_table " +
+                            "ON fruits.fruit_name=fn_table.fruit_name " +
+                            "WHERE nutrition=? and amount > 0 ORDER BY amount DESC", recommendMapper(), s);
+
+            result.addAll(fruits);
+        }
+
+        return result;
+    }
+
+    private RowMapper<RecommendFruit> recommendMapper(){
+        return (rs, rowNum) ->{
+            return new RecommendFruit(rs.getString("file_name"), rs.getString("fruit_name"), rs.getString("nutrition"));
+        };
+    }
 }

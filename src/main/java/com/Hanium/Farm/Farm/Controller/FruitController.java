@@ -2,6 +2,7 @@ package com.Hanium.Farm.Farm.Controller;
 
 import com.Hanium.Farm.Farm.Domain.Fruit;
 import com.Hanium.Farm.Farm.Domain.PeriodFruit;
+import com.Hanium.Farm.Farm.Domain.RecommendFruit;
 import com.Hanium.Farm.Farm.Service.FruitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,6 +43,13 @@ public class FruitController {
     public ArrayList<PeriodFruit> getPeriodFruits(@RequestParam int month){
         ArrayList<PeriodFruit> fruits =  fruitService.getPeriodFruits(month);
         System.out.println(month);
+        return fruits;
+    }
+
+    @GetMapping("/recommend")
+    @ResponseBody
+    public ArrayList<RecommendFruit> recommendFruit(@RequestParam String[] nutrition){
+        ArrayList<RecommendFruit> fruits = fruitService.getRecommendFruits(nutrition);
         return fruits;
     }
 }

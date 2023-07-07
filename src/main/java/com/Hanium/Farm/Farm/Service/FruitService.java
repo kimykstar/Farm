@@ -2,6 +2,7 @@ package com.Hanium.Farm.Farm.Service;
 
 import com.Hanium.Farm.Farm.Domain.Fruit;
 import com.Hanium.Farm.Farm.Domain.PeriodFruit;
+import com.Hanium.Farm.Farm.Domain.RecommendFruit;
 import com.Hanium.Farm.Farm.Repository.FruitRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,6 +27,11 @@ public class FruitService {
 
     public ArrayList<PeriodFruit> getPeriodFruits(int month){
         ArrayList<PeriodFruit> fruits = fruitRepository.getPeriodFruit(month);
+        return fruits;
+    }
+
+    public ArrayList<RecommendFruit> getRecommendFruits(String[] nutrition){
+        ArrayList<RecommendFruit> fruits = fruitRepository.getRecommendFruit(nutrition);
         return fruits;
     }
 
