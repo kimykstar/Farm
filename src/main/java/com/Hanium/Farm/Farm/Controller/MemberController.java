@@ -5,6 +5,8 @@ import com.Hanium.Farm.Farm.Service.MemberService;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 public class MemberController {
     MemberService memberService;
+    Log log = LogFactory.getLog(MemberController.class);
     @Autowired
     public MemberController(MemberService memberService){
         this.memberService = memberService;
@@ -56,8 +59,12 @@ public class MemberController {
         String[] user = messageBody.split(" ");
         String id = user[0];
         String pw = user[1];
+        log.info(id);
+        log.info(pw);
+
         String name = user[2];
         String phone = user[3];
+
         int age = Integer.parseInt(user[4]);
 
         Member m = new Member(id, pw, name, phone, age);
