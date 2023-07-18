@@ -12,6 +12,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 public class CommunityController {
     CommunityService communityService;
+
     Log log = LogFactory.getLog(CommunityService.class);
     @Autowired
     public CommunityController(CommunityService communityService){
@@ -28,34 +30,36 @@ public class CommunityController {
     @PostMapping("/regist")
     public String registReview(HttpServletRequest request) throws IOException {
         String result = "False";
+        System.out.println("regist");
         try{
             InputStream inputStream = request.getInputStream();
             String message = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
             if(message != null)
                 result = "true";
             System.out.println(message);
-            System.out.println("-----------");
         }catch(IOException e){
             log.info("register Error");
         }
         return result;
     }
 
-    @PostMapping("/image")
+    @PostMapping("image")
     public String registImage(HttpServletRequest request) throws IOException {
-        System.out.println("image");
         ServletInputStream inputStream = request.getInputStream();
 
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-        System.out.println(messageBody);
-//        byte[] imageData = request.getInputStream().readAllBytes();
-//        System.out.println("image");
-//        if(imageData != null) {
-//            System.out.println("success");
-//            System.out.println(imageData);
-//        }else{
-//            System.out.println("False");
-//        }
+        byte[] imageData = request.getInputStream().readAllBytes();
+
+        if(imageData != null) {
+            try{
+                FileOutputStream fos = new FileOutputStream("../../resources/ReviewImage");
+                fos.write(imageData);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("False");
+        }
         return "true";
     }
 
