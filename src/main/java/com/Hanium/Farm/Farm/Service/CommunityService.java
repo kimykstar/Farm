@@ -1,8 +1,11 @@
 package com.Hanium.Farm.Farm.Service;
 
-public class CommunityService {
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+public class CommunityService {
+    Log log = LogFactory.getLog(CommunityService.class);
     public void image_pro(){
-        System.out.println("파일 있습니다");
+        log.info("파일 있습니다");
     }
 }

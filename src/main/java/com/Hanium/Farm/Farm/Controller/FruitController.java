@@ -34,7 +34,6 @@ public class FruitController {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
         String temp = gson.toJson(info);
-        log.info(temp);
         return temp;
     }
 
@@ -52,4 +51,7 @@ public class FruitController {
         ArrayList<RecommendFruit> fruits = fruitService.getRecommendFruits(nutrition);
         return fruits;
     }
+
+
+
 }
