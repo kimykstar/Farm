@@ -45,14 +45,14 @@ public class CommunityController {
 
     @PostMapping("image")
     public String registImage(HttpServletRequest request) throws IOException {
-        ServletInputStream inputStream = request.getInputStream();
 
-        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+        System.out.println("image");
         byte[] imageData = request.getInputStream().readAllBytes();
+        String filePath = "src/main/resources/static";
 
         if(imageData != null) {
             try{
-                FileOutputStream fos = new FileOutputStream("../../resources/ReviewImage");
+                FileOutputStream fos = new FileOutputStream(filePath + "/image.jpg");
                 fos.write(imageData);
             }catch(Exception e){
                 e.printStackTrace();
