@@ -54,7 +54,7 @@ public class CommunityService {
         while(it.hasNext()){ // 리뷰 정보에 담긴 fruit_name, user_id, review_time을 합하여 이미지 이름 생성
             Review review = it.next();
             String[] temp = review.getReview_time().split(" ");
-            String review_time = temp[0] + "-" + temp[1].replace(":", "-");
+            String review_time = temp[0] + "." + temp[1].replace(":", "-");
 
             String fileName = review.getFruit_name() + "_" + review.getUser_id() + "_" + review_time + ".jpg";
             try {
