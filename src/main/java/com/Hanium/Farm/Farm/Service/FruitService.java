@@ -35,4 +35,9 @@ public class FruitService {
         return fruits;
     }
 
+    public ArrayList<String> getFruitNames(){
+        ArrayList<String> names = fruitRepository.getFruitNames();
+        return names;
+    }
+
 }

@@ -97,4 +97,20 @@ public class FruitRepository implements FruitRepositoryInterface{
             return new RecommendFruit(rs.getString("file_name"), rs.getString("fruit_name"), rs.getString("nutrition"), rs.getString("amount"), rs.getString("unit"));
         };
     }
+
+    @Override
+    public ArrayList<String> getFruitNames(){
+        ArrayList<String> names = new ArrayList<>();
+
+        List<String> list = jdbcTemplate.query("SELECT fruit_name FROM fruits", fruitnameMapper());
+        names.addAll(list);
+
+        return names;
+    }
+
+    private RowMapper<String> fruitnameMapper(){
+        return (rs, rowNum) ->{
+            return rs.getString("fruit_name");
+        };
+    }
 }

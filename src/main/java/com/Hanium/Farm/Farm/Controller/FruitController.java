@@ -52,6 +52,12 @@ public class FruitController {
         return fruits;
     }
 
+    @GetMapping("/fruitnames")
+    @ResponseBody
+    public ArrayList<String> getFruitNames(){
+        ArrayList<String> names = fruitService.getFruitNames();
+        return names;
+    }
 
 
 }

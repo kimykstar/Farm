@@ -14,5 +14,6 @@ public interface FruitRepositoryInterface {
     FruitInfo getNutritionInfo(String fruit);
     ArrayList<PeriodFruit> getPeriodFruit(int month);
     ArrayList<RecommendFruit> getRecommendFruit(String[] nutritions);
+    ArrayList<String> getFruitNames();
 
 }

@@ -28,6 +28,16 @@ class FarmApplicationTests {
 	}
 
 	@Test
+	public void FruitNameTest(){
+		ArrayList<String> list = fruitRepository.getFruitNames();
+
+		Iterator<String> it = list.iterator();
+		while(it.hasNext()){
+			System.out.println(it.next());
+		}
+	}
+
+	@Test
 	public void RecommendTest(){
 		String[] nutritions = {"비타민 A", "비타민 C", "비타민 E"};
 		ArrayList<RecommendFruit> result = fruitRepository.getRecommendFruit(nutritions);
