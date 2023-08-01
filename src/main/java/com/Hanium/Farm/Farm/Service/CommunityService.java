@@ -2,6 +2,7 @@ package com.Hanium.Farm.Farm.Service;
 
 import com.Hanium.Farm.Farm.Domain.Review;
 import com.Hanium.Farm.Farm.Domain.ReviewInfo;
+import com.Hanium.Farm.Farm.Domain.ReviewPath;
 import com.Hanium.Farm.Farm.Repository.CommunityRepositoryInterface;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -22,13 +24,14 @@ public class CommunityService {
         this.communityRepository = communityRepository;
     }
 
-    public void registReview(MultipartFile image, String review){
+    public String registReview(MultipartFile image, String review, String method, String fileName){
         String filePath = "src/main/resources/static/";
+        String result = "false";
 
         try{
             if(!image.isEmpty()) { // Image처리 Image가 존재할 경우 Image를 경로에 저장한다.
                 byte[] imageData = image.getBytes();
-                byte[] decodedBytes = Base64.getDecoder().decode(image.getOriginalFilename()); // Base65로부터 디코딩 함
+                byte[] decodedBytes = Base64.getDecoder().decode(image.getOriginalFilename()); // Base64로부터 디코딩 함
                 String originalImageName = new String(decodedBytes, StandardCharsets.UTF_8); // UTF-8로부터 디코딩함
                 String totalPath = filePath + originalImageName; // Image파일 이름은 과일이름_사용자ID_리뷰시간.jpg
                 FileOutputStream fos = new FileOutputStream(totalPath); // Image이름을 정하여 지정된 경로에 이미지 파일을 저장한다.
@@ -38,10 +41,17 @@ public class CommunityService {
             Gson gson = new Gson();
             Review review_content = gson.fromJson(review, Review.class); // json으로부터 Review객체 생성
             System.out.println("이미지 업로드 성공");
-            communityRepository.upload_review(review_content);
+            if(method.equals("upload")) { // 게시물 등록 요청 시 DB작업
+                result = communityRepository.upload_review(review_content);
+            }
+            else if(method.equals("update")){ // 게시물 수정 요청 시 DB작업
+                result = communityRepository.updateReview(review_content, fileName.split("_")[0].toString());
+            }
         }catch(IOException e){
             e.printStackTrace();
         }
+
+        return result;
     }
 
     // ArrayList형태로 Review정보와 Image데이터를 전달한다.
@@ -65,7 +75,95 @@ public class CommunityService {
                 e.printStackTrace();
             }
         }
+        return result;
+    }
+
+    // Review객체와 Image정보를 바탕을로 ReviewInfo를 Controller에 전달한다.
+    public ArrayList<ReviewInfo> getUserReviews(String user_id){
+        ArrayList<Review> reviews = communityRepository.getUserReviews(user_id);
+        if(reviews == null){
+            System.out.println("null");
+        }else
+            System.out.println("not null");
+        Iterator<Review> it = reviews.iterator();
+        ArrayList<ReviewInfo> result = new ArrayList<>();
+        String filePath = "src/main/resources/static/";
+
+        while(it.hasNext()) {
+            Review review = it.next();
+            String[] temp = review.getReview_time().split(" ");
+            String review_time = temp[0] + "-" + temp[1].replace(":", "-");
+
+            String fileName = review.getFruit_name() + "_" + review.getUser_id() + "_" + review_time + ".jpg";
+            try {
+                byte[] imageBytes = Files.readAllBytes(Paths.get(filePath + fileName));
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                result.add(new ReviewInfo(review, base64Image)); // fileName을 image로
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         return result;
     }
+
+    public String deleteReview(Review review){
+        review.setReview_time(review.getReview_time().replace(" ", "-"));
+        review.setReview_time(review.getReview_time().replace(":", "-"));
+        System.out.println(review.getUser_id());
+        review.setUser_id(review.getUser_id().split(":")[1]);
+        System.out.println(review.getUser_id());
+        String result = communityRepository.deleteReview(review);
+
+        String filePath = "src/main/resources/static/";
+        String filename = review.getFruit_name() + "_" + review.getUser_id() + "_" + review.getReview_time() + ".jpg";
+
+        try{
+            if(result.equals("true")) {
+                Path path = Paths.get(filePath + filename);
+                Files.delete(path);
+            }else
+                System.out.println("DB삭제 실패");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public String deleteImage(String fileName) {
+        String flag = "false";
+        String filePath = "src/main/resources/static/";
+
+        // 경로 설정 및 이미지 파일 삭제
+        Path path = Paths.get(filePath + fileName);
+        try {
+            Files.delete(path);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return flag;
+    }
+
+    public String updateReview(Review review, String fileName)  {
+        String result;
+
+        String filePath = "src/main/resources/static/";
+        String totalPath = filePath + fileName;
+        String temp = review.getReview_time().replace(" ", "-").replace(":", "-");
+        String name = review.getFruit_name() + "_" + review.getUser_id() + "_" + temp + ".jpg";
+        filePath += name;
+        try {
+            Files.move(Path.of(totalPath), Path.of(filePath));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        result = communityRepository.updateReview(review, fileName.split("_")[0]);
+
+        return result;
+    }
+
+
 }
