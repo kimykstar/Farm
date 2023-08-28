@@ -1,8 +1,6 @@
 package com.Hanium.Farm.Farm.Repository;
 
 import com.Hanium.Farm.Farm.Domain.Review;
-import com.Hanium.Farm.Farm.Domain.ReviewInfo;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

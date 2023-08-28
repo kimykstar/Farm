@@ -18,7 +18,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc:2.3.7.RELEASE'
-	implementation 'mysql:mysql-connector-java'
+	implementation 'mysql:mysql-connector-java:17'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 }
