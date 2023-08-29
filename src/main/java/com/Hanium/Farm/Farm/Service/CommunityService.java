@@ -18,7 +18,7 @@ import java.util.*;
 
 public class CommunityService {
     CommunityRepositoryInterface communityRepository;
-    String filePath = "src/main/resources/static/";
+    String filePath = "src/main/resources/static";
 
     @Autowired
     public CommunityService(CommunityRepositoryInterface communityRepository){
