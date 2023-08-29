@@ -4,7 +4,6 @@ import com.Hanium.Farm.Farm.Domain.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +78,6 @@ public class CommunityRepository implements CommunityRepositoryInterface{
         return reviews;
     }
 
-
     private RowMapper<Review> userReviewMapper(){
         return (rs, rowNum) ->{
             String fruit_name = rs.getString("fruit_name");
@@ -95,7 +93,6 @@ public class CommunityRepository implements CommunityRepositoryInterface{
         };
     }
 
-
     // 게시물 내용 수정
     @Override
     public String updateReview(Review review, String pre_name) {
@@ -107,7 +104,6 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             flag = "true";
         return flag;
     }
-
 
     // 게시물 내용 삭제
     @Override

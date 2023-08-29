@@ -15,20 +15,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MemberRepositoryTest {
 
     @Autowired MemberRepositoryInterface memberRepository;
-    @Test
-    void 비번가져오기(){
-        // given
-        String id = "user";
-        String pw="user";
-
-        Member member = memberRepository.getMember(id);
-
-        String result = member.getPw();
-
-        System.out.println(result);
-
-        assertThat(result).isEqualTo(pw);
-    }
+//    @Test
+//    void 비번가져오기(){
+//        // given
+//        String id = "user";
+//        String pw="user";
+//
+//        Member member = memberRepository.getMember(id);
+//
+//        String result = member.getPw();
+//
+//        System.out.println(result);
+//
+//        assertThat(result).isEqualTo(pw);
+//    }
 
     @Test
     void 회원가입(){

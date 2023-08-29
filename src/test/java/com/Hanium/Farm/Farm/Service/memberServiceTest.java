@@ -14,13 +14,13 @@ public class memberServiceTest {
         this.memberRepository = memberRepository;
     }
 
-    @Test
-    void login(){
+//    @Test
+//    void login(){
 //        String inputId = "user";
 //        String inputPw = "user";
 //
 //        String getpw = memberRepository.getPwHash(inputId);
 //
 //        assertThat(inputPw).isEqualTo(getpw);
-    }
+//    }
 }
