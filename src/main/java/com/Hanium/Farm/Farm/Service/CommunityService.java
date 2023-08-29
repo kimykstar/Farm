@@ -25,7 +25,7 @@ public class CommunityService {
     }
 
     public String registReview(MultipartFile image, String review, String method, String fileName){
-        String filePath = "src/main/resources/static/";
+        String filePath = "/src/main/resources/static/";
         String result = "false";
 
         try{
