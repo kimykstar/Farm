@@ -25,7 +25,7 @@ public class CommunityService {
     }
 
     public String registReview(MultipartFile image, String review, String method, String fileName){
-        String filePath = "/src/main/resources/static/";
+        String filePath = "/images/";
         String result = "false";
 
         try{
@@ -57,7 +57,7 @@ public class CommunityService {
     // ArrayList형태로 Review정보와 Image데이터를 전달한다.
     public ArrayList<ReviewInfo> getReviews(String fruit_name) { // Review정보와 image Byte데이터를 Base64로 String형식으로 만들어 반환
         ArrayList<Review> reviews = communityRepository.getReviewInfo(fruit_name);
-        String filePath = "src/main/resources/static/";
+        String filePath = "/images/";
         ArrayList<ReviewInfo> result = new ArrayList<ReviewInfo>();
 
         Iterator<Review> it = reviews.iterator();
@@ -87,7 +87,7 @@ public class CommunityService {
             System.out.println("not null");
         Iterator<Review> it = reviews.iterator();
         ArrayList<ReviewInfo> result = new ArrayList<>();
-        String filePath = "src/main/resources/static/";
+        String filePath = "/images/";
 
         while(it.hasNext()) {
             Review review = it.next();
@@ -115,7 +115,7 @@ public class CommunityService {
         System.out.println(review.getUser_id());
         String result = communityRepository.deleteReview(review);
 
-        String filePath = "src/main/resources/static/";
+        String filePath = "/images/";
         String filename = review.getFruit_name() + "_" + review.getUser_id() + "_" + review.getReview_time() + ".jpg";
 
         try{
@@ -133,7 +133,7 @@ public class CommunityService {
 
     public String deleteImage(String fileName) {
         String flag = "false";
-        String filePath = "src/main/resources/static/";
+        String filePath = "/images/";
 
         // 경로 설정 및 이미지 파일 삭제
         Path path = Paths.get(filePath + fileName);
@@ -149,7 +149,7 @@ public class CommunityService {
     public String updateReview(Review review, String fileName)  {
         String result;
 
-        String filePath = "src/main/resources/static/";
+        String filePath = "/images/";
         String totalPath = filePath + fileName;
         String temp = review.getReview_time().replace(" ", "-").replace(":", "-");
         String name = review.getFruit_name() + "_" + review.getUser_id() + "_" + temp + ".jpg";
@@ -164,6 +164,5 @@ public class CommunityService {
 
         return result;
     }
-
 
 }
