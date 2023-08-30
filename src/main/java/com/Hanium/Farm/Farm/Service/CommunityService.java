@@ -2,12 +2,10 @@ package com.Hanium.Farm.Farm.Service;
 
 import com.Hanium.Farm.Farm.Domain.Review;
 import com.Hanium.Farm.Farm.Domain.ReviewInfo;
-import com.Hanium.Farm.Farm.Domain.ReviewPath;
 import com.Hanium.Farm.Farm.Repository.CommunityRepositoryInterface;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +16,7 @@ import java.util.*;
 
 public class CommunityService {
     CommunityRepositoryInterface communityRepository;
-    String filePath = "../../src/main/resources/static";
+    String filePath = "";
 
     @Autowired
     public CommunityService(CommunityRepositoryInterface communityRepository){
