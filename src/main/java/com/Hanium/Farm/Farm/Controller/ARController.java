@@ -18,10 +18,9 @@ public class ARController {
 
     @GetMapping(value = "arimage")
     public String pushARImage(@RequestParam("fruit_name") String fruit_name) throws IOException {
-        String gltfPath = "src/main/resources/static/" + fruit_name + ".gltf";
+        String gltfPath = "models/" + fruit_name + ".gltf";
 
-        ClassPathResource resource = new ClassPathResource("/static/" + fruit_name + ".gltf");
-        String gltfJson = new String(Files.readAllBytes(Paths.get(resource.getPath())), StandardCharsets.UTF_8);
+        String gltfJson = new String(Files.readAllBytes(Paths.get(gltfPath)), StandardCharsets.UTF_8);
         return gltfJson;
     }
 
