@@ -1,6 +1,10 @@
 package com.Hanium.Farm.Farm.Repository;
 
 import com.Hanium.Farm.Farm.Domain.Review;
+import com.Hanium.Farm.Farm.Domain.SingleComment;
+import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,6 +15,7 @@ import java.util.List;
 public class CommunityRepository implements CommunityRepositoryInterface{
 
     private final JdbcTemplate jdbcTemplate;
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
     public CommunityRepository(DataSource dataSource){
@@ -25,17 +30,16 @@ public class CommunityRepository implements CommunityRepositoryInterface{
         String user_id = review.getUser_id();
         String content = review.getContent();
         String flavor = review.getFlavor();
-        int good = 0;
 
         int cnt;
         String result = "false";
 
         if(flavor != null){
-            cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content, flavor, good)" +
-                    "VALUES (?, ?, ?, ?, ?, ?);", fruit_name, review_time, user_id, content, flavor, good);
+            cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content, flavor)" +
+                    "VALUES (?, ?, ?, ?, ?);", fruit_name, review_time, user_id, content, flavor);
         }else{
-            cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content, good)" +
-                    "VALUES (?, ?, ?, ?, ?, ?);", fruit_name, review_time, user_id, content, good);
+            cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content)" +
+                    "VALUES (?, ?, ?, ?, ?);", fruit_name, review_time, user_id, content, "");
         }
 
         if(cnt > 0)
@@ -46,7 +50,7 @@ public class CommunityRepository implements CommunityRepositoryInterface{
         return result;
     }
 
-    // 과일 이름 별 전체 게시물 받아오기
+    // 과일 이름 별 전체 게시물 및 댓글 받아오기
     @Override
     public ArrayList<Review> getReviewInfo(String fruit_name){;
         List<Review> result = jdbcTemplate.query("SELECT * FROM review WHERE fruit_name=?", reviewMapper(), fruit_name);
@@ -62,11 +66,12 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             String user_id = rs.getString("id");
             String content = rs.getString("content");
             String flavor = rs.getString("flavor");
-            int good = rs.getInt("good");
+            String review_id = rs.getString("review_id");
+
             if(content != null) // 내용이 있는 경우
-                return new Review(fruit_name, review_time, user_id, content, flavor, good);
+                return new Review(fruit_name, review_time, user_id, content, flavor, review_id);
             else // 내용이 없는 경우
-                return new Review(fruit_name, review_time, user_id, null, flavor, good);
+                return new Review(fruit_name, review_time, user_id, "", flavor, review_id);
         };
     }
 
@@ -85,11 +90,11 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             String user_id = rs.getString("id");
             String content = rs.getString("content");
             String flavor = rs.getString("flavor");
-            int good = rs.getInt("good");
+            String review_id = rs.getString("review_id");
             if(content != null)
-                return new Review(fruit_name, review_time, user_id, content, flavor, good);
+                return new Review(fruit_name, review_time, user_id, content, flavor, review_id);
             else
-                return new Review(fruit_name, review_time, user_id, null, flavor, good);
+                return new Review(fruit_name, review_time, user_id, null, flavor, review_id);
         };
     }
 
@@ -114,4 +119,38 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             result = "true";
         return result;
     }
+
+    // 게시물에 대한 댓글 정보들을 모두 가져온다.
+    @Override
+    public ArrayList<SingleComment> getComments(String review_id){
+        ArrayList<SingleComment> comments = new ArrayList<>();
+
+        List<SingleComment> temp = jdbcTemplate.query("SELECT * FROM comment WHERE review_id=?", CommentsMapper(), review_id);
+        comments.addAll(temp);
+
+        return comments;
+    }
+
+    private RowMapper<SingleComment> CommentsMapper() {
+        return (rs, rowNum) ->{
+            return new SingleComment(rs.getString("id"), rs.getString("comment"), rs.getString("post_time"), rs.getString("review_id"));
+        };
+    }
+
+
+    @Override
+    public boolean insertComment(SingleComment comment){
+        boolean result = false;
+
+        System.out.println(comment.getReview_id() + comment.getDate() + comment.getUser_id() + comment.getComment());
+        // insert구문 성공 시 result = true구문
+        jdbcTemplate.update("INSERT INTO comment(review_id, post_time, id, comment) " +
+                "VALUES(?, ?, ?, ?)", comment.getReview_id(), comment.getDate(), comment.getUser_id(), comment.getComment());
+
+        return result;
+    }
+
+
+
+
 }

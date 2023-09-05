@@ -2,6 +2,7 @@ package com.Hanium.Farm.Farm.Repository;
 
 import com.Hanium.Farm.Farm.Domain.Review;
 import com.Hanium.Farm.Farm.Domain.ReviewInfo;
+import com.Hanium.Farm.Farm.Domain.SingleComment;
 
 import java.util.ArrayList;
 
@@ -18,4 +19,7 @@ public interface CommunityRepositoryInterface {
 
     public String deleteReview(Review review);
 
+    public ArrayList<SingleComment> getComments(String review_id);
+
+    public boolean insertComment(SingleComment comment);
 }

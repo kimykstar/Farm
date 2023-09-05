@@ -16,6 +16,8 @@ import java.nio.file.Paths;
 @RestController
 public class ARController {
 
+    // 본 서버에서는 gltf파일의 경로는 ~/Farm/build/libs/models안에 있어야 함
+    // 아래 코드는 본 서버 기준으로 작성된 코드임
     @GetMapping(value = "arimage")
     public String pushARImage(@RequestParam("fruit_name") String fruit_name) throws IOException {
         String gltfPath = "models/" + fruit_name + ".gltf";

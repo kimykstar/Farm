@@ -3,23 +3,30 @@ package com.Hanium.Farm.Farm.Controller;
 import com.Hanium.Farm.Farm.Domain.Review;
 import com.Hanium.Farm.Farm.Domain.ReviewInfo;
 import com.Hanium.Farm.Farm.Domain.ReviewPath;
+import com.Hanium.Farm.Farm.Domain.SingleComment;
 import com.Hanium.Farm.Farm.Service.CommunityService;
 import com.google.gson.Gson;
+import jakarta.servlet.ServletInputStream;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 
 @RestController
 public class CommunityController {
     CommunityService communityService;
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    Log log = LogFactory.getLog(CommunityService.class);
     @Autowired
     public CommunityController(CommunityService communityService){
         this.communityService = communityService;
@@ -28,7 +35,6 @@ public class CommunityController {
     @PostMapping("regist")
     public String registPost(@RequestParam("image") MultipartFile image, @RequestParam("review") String review) throws IOException {
         communityService.registReview(image, review, "upload", null);
-        System.out.println(review);
 
         return "true";
     }
@@ -49,7 +55,7 @@ public class CommunityController {
 
     @DeleteMapping("deletereview")
     public String deleteReview(@RequestParam("fruit_name") String fruit_name, @RequestParam("user_id") String user_id, @RequestParam("reviewtime") String reviewTime){
-        Review review = new Review(fruit_name,  reviewTime, user_id, "", "", 0);
+        Review review = new Review(fruit_name,  reviewTime, user_id, "", "", "");
         String result = communityService.deleteReview(review);
 
 
@@ -74,10 +80,28 @@ public class CommunityController {
         String flag = "false";
         Review review = reviewPath.getReview();
         String fileName = reviewPath.getFilePath();
-//        Review review = reviewInfo.keySet().iterator().next();
-//        String fileName = reviewInfo.get(review);
         flag = communityService.updateReview(review, fileName);
 
         return flag;
+    }
+
+    @GetMapping("comments")
+    public ArrayList<SingleComment> getOneComment(@RequestParam String review_id){
+        ArrayList<SingleComment> comments = communityService.getComments(review_id);
+
+        return comments;
+    }
+
+    @PostMapping("insertComment")
+    public boolean insertComment(HttpServletRequest request) throws IOException{
+        boolean result = false;
+
+        ServletInputStream inputStream = request.getInputStream();
+
+        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+        SingleComment comment = new Gson().fromJson(messageBody, SingleComment.class);
+        result = communityService.insertComment(comment);
+
+        return result;
     }
 }

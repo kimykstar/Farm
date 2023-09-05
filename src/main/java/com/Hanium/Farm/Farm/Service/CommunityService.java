@@ -2,6 +2,7 @@ package com.Hanium.Farm.Farm.Service;
 
 import com.Hanium.Farm.Farm.Domain.Review;
 import com.Hanium.Farm.Farm.Domain.ReviewInfo;
+import com.Hanium.Farm.Farm.Domain.SingleComment;
 import com.Hanium.Farm.Farm.Repository.CommunityRepositoryInterface;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +129,6 @@ public class CommunityService {
 
     public String deleteImage(String fileName) {
         String flag = "false";
-        String filePath = "/images/";
 
         // 경로 설정 및 이미지 파일 삭제
         Path path = Paths.get(filePath + fileName);
@@ -155,6 +155,20 @@ public class CommunityService {
         }
 
         result = communityRepository.updateReview(review, fileName.split("_")[0]);
+
+        return result;
+    }
+
+    public ArrayList<SingleComment> getComments(String review_id){
+        ArrayList<SingleComment> comments = communityRepository.getComments(review_id);
+
+        return comments;
+    }
+
+    public boolean insertComment(SingleComment comment){
+        boolean result = false;
+
+        result = communityRepository.insertComment(comment);
 
         return result;
     }

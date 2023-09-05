@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class FruitController {
 
     FruitService fruitService;
-    Log log = LogFactory.getLog(FruitController.class);
 
     @Autowired
     public FruitController(FruitService fruitService){
@@ -41,7 +40,6 @@ public class FruitController {
     @ResponseBody
     public ArrayList<PeriodFruit> getPeriodFruits(@RequestParam int month){
         ArrayList<PeriodFruit> fruits =  fruitService.getPeriodFruits(month);
-        System.out.println(month);
         return fruits;
     }
 

@@ -58,8 +58,6 @@ public class MemberController {
         String[] user = messageBody.split(" ");
         String id = user[0];
         String pw = user[1];
-        log.info(id);
-        log.info(pw);
 
         String name = user[2];
         String phone = user[3];
@@ -80,7 +78,7 @@ public class MemberController {
     @GetMapping(value="/delete")
     public boolean delete(@RequestParam String id){
         boolean result = memberService.delete(id);
-        System.out.println(id);
+
         return result;
     }
 
