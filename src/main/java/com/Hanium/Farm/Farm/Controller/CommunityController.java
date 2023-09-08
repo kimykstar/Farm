@@ -54,8 +54,8 @@ public class CommunityController {
     }
 
     @DeleteMapping("deletereview")
-    public String deleteReview(@RequestParam("fruit_name") String fruit_name, @RequestParam("user_id") String user_id, @RequestParam("reviewtime") String reviewTime){
-        Review review = new Review(fruit_name,  reviewTime, user_id, "", "", "");
+    public String deleteReview(@RequestParam("fruit_name") String fruit_name, @RequestParam("user_id") String user_id, @RequestParam("reviewtime") String reviewTime, @RequestParam("review_id") String review_id){
+        Review review = new Review(fruit_name,  reviewTime, user_id, "", "", review_id, "");
         String result = communityService.deleteReview(review);
 
 
@@ -104,4 +104,30 @@ public class CommunityController {
 
         return result;
     }
+
+    @DeleteMapping("removeComment")
+    public boolean removeComment(@RequestParam("review_id") String review_id, @RequestParam("user_id") String user_id, @RequestParam("comment") String comment){
+        SingleComment com = new SingleComment(user_id, comment, "", review_id);
+
+        boolean result = communityService.removeComment(com);
+
+        return false;
+    }
+
+    @PostMapping("insertGood")
+    public boolean insertGood(HttpServletRequest request) throws IOException {
+        ServletInputStream inputStream = request.getInputStream();
+        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
+        String[] messages = messageBody.split(" ");
+        String review_id = messages[0];
+        String user_id = messages[1];
+        boolean result = communityService.insertGood(review_id, user_id);
+        return result;
+    }
+
+    @DeleteMapping("deleteGood")
+    public boolean deleteGood(@RequestParam("review_id") String review_id, @RequestParam("user_id") String user_id){
+        return communityService.deleteGood(review_id, user_id);
+    }
+
 }

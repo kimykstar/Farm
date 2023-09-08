@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 public class FruitService {
@@ -38,6 +39,18 @@ public class FruitService {
     public ArrayList<String> getFruitNames(){
         ArrayList<String> names = fruitRepository.getFruitNames();
         return names;
+    }
+
+    public String getHotFruits(){
+        ArrayList<String> names = fruitRepository.getHotFruit();
+        Iterator<String> it = names.iterator();
+        String result = "";
+
+        while(it.hasNext()){
+            result += it.next() + " ";
+        }
+
+        return result;
     }
 
 }

@@ -173,4 +173,18 @@ public class CommunityService {
         return result;
     }
 
+    public boolean removeComment(SingleComment comment){
+        boolean result = communityRepository.removeComment(comment);
+
+        return result;
+    }
+
+    public boolean insertGood(String review_id, String user_id){
+        return communityRepository.insertGood(review_id, user_id);
+    }
+
+    public boolean deleteGood(String review_id, String user_id){
+        return communityRepository.deleteGood(review_id, user_id);
+    }
+
 }

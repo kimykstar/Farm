@@ -8,9 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class FruitRepository implements FruitRepositoryInterface{
 
@@ -76,6 +74,7 @@ public class FruitRepository implements FruitRepositoryInterface{
         };
     }
 
+    // 사용자 추천 과일
     @Override
     public ArrayList<RecommendFruit> getRecommendFruit(String[] nutritions) {
         ArrayList<RecommendFruit> result = new ArrayList<>();
@@ -110,6 +109,29 @@ public class FruitRepository implements FruitRepositoryInterface{
 
     private RowMapper<String> fruitnameMapper(){
         return (rs, rowNum) ->{
+            return rs.getString("fruit_name");
+        };
+    }
+
+    @Override
+    public ArrayList<String> getHotFruit(){
+        ArrayList<String> list = new ArrayList<>();
+
+        List<String> names = jdbcTemplate.query("SELECT * FROM review LEFT JOIN (SELECT review.review_id, count(*) as cnt FROM review LEFT JOIN good ON review.review_id=good.review_id ORDER BY cnt DESC)" +
+                "as t1 ON review.review_id=t1.review_id", hotFruitMapper(), null);
+        Set<String> sets = new LinkedHashSet<>();
+        Iterator<String> it = names.iterator();
+        // Set 길이가 3이 될때까지 or names이 요소 순회를 다 마친 경우까지 반복
+        while(it.hasNext() && sets.size() <= 3)
+            sets.add(it.next());
+
+        list.addAll(sets);
+
+        return list;
+    }
+
+    private RowMapper<String> hotFruitMapper(){
+        return (rs, rowNum)->{
             return rs.getString("fruit_name");
         };
     }

@@ -57,5 +57,9 @@ public class FruitController {
         return names;
     }
 
-
+    // 과일의 이름을 띄어쓰기를 구분자로 해서 받는다.
+    @GetMapping("hotFruits")
+    public String getHotFruits(){
+        return fruitService.getHotFruits();
+    }
 }

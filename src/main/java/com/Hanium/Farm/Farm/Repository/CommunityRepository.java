@@ -50,12 +50,13 @@ public class CommunityRepository implements CommunityRepositoryInterface{
         return result;
     }
 
-    // 과일 이름 별 전체 게시물 및 댓글 받아오기
+    // 과일 이름 별 전체 게시물 및 좋아요 받아오기
     @Override
     public ArrayList<Review> getReviewInfo(String fruit_name){;
-        List<Review> result = jdbcTemplate.query("SELECT * FROM review WHERE fruit_name=?", reviewMapper(), fruit_name);
+        List<Review> result = jdbcTemplate.query("SELECT * FROM review LEFT JOIN good ON review.review_id=good.review_id WHERE fruit_name=? ORDER BY review_time", reviewMapper(), fruit_name);
         ArrayList<Review> reviews = new ArrayList<>();
         reviews.addAll(result);
+
         return reviews;
     }
 
@@ -67,17 +68,24 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             String content = rs.getString("content");
             String flavor = rs.getString("flavor");
             String review_id = rs.getString("review_id");
-
+            String comment_user_id = rs.getString("user_id");
+            String good = rs.getString("user_id");
             if(content != null) // 내용이 있는 경우
-                return new Review(fruit_name, review_time, user_id, content, flavor, review_id);
+                if(good == null)
+                    return new Review(fruit_name, review_time, user_id, content, flavor, review_id, "");
+                else
+                    return new Review(fruit_name, review_time, user_id, content, flavor, review_id, good);
             else // 내용이 없는 경우
-                return new Review(fruit_name, review_time, user_id, "", flavor, review_id);
+                if(good == null)
+                    return new Review(fruit_name, review_time, user_id, null, flavor, review_id, "");
+                else
+                    return new Review(fruit_name, review_time, user_id, null, flavor, review_id, good);
         };
     }
 
     @Override
     public ArrayList<Review> getUserReviews(String user_id){
-        List<Review> result = jdbcTemplate.query("SELECT * FROM review WHERE id=?", userReviewMapper(), user_id);
+        List<Review> result = jdbcTemplate.query("SELECT * FROM review LEFT JOIN good ON review.review_id=good.review_id WHERE id=?", userReviewMapper(), user_id);
         ArrayList<Review> reviews = new ArrayList<>();
         reviews.addAll(result);
         return reviews;
@@ -91,10 +99,18 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             String content = rs.getString("content");
             String flavor = rs.getString("flavor");
             String review_id = rs.getString("review_id");
+            String good = rs.getString("user_id");
+
             if(content != null)
-                return new Review(fruit_name, review_time, user_id, content, flavor, review_id);
+                if(good == null)
+                    return new Review(fruit_name, review_time, user_id, content, flavor, review_id, "");
+                else
+                    return new Review(fruit_name, review_time, user_id, content, flavor, review_id, good);
             else
-                return new Review(fruit_name, review_time, user_id, null, flavor, review_id);
+                if(good == null)
+                    return new Review(fruit_name, review_time, user_id, null, flavor, review_id, "");
+                else
+                    return new Review(fruit_name, review_time, user_id, null, flavor, review_id, good);
         };
     }
 
@@ -114,6 +130,7 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     @Override
     public String deleteReview(Review review) {
         int cnt = jdbcTemplate.update("DELETE FROM review WHERE fruit_name=? and id=? and review_time=?", review.getFruit_name(), review.getUser_id(), review.getReview_time());
+        jdbcTemplate.update("DELETE FROM good WHERE review_id=? and user_id=?", review.getReview_id(), review.getUser_id());
         String result = "false";
         if(cnt > 0)
             result = "true";
@@ -132,7 +149,7 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     }
 
     private RowMapper<SingleComment> CommentsMapper() {
-        return (rs, rowNum) ->{
+        return (rs, rowNum) -> {
             return new SingleComment(rs.getString("id"), rs.getString("comment"), rs.getString("post_time"), rs.getString("review_id"));
         };
     }
@@ -151,6 +168,37 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     }
 
 
+    @Override
+    public boolean removeComment(SingleComment comment){
+        int cnt;
+        boolean result;
 
+        cnt = jdbcTemplate.update("DELETE FROM comment WHERE review_id=? and comment=? and user_id=?", comment.getReview_id(), comment.getComment(), comment.getUser_id());
+        if(cnt > 0)
+            result = true;
+        else
+            result = false;
+
+        return result;
+    }
+
+    @Override
+    public boolean insertGood(String review_id, String user_id){
+        int cnt = jdbcTemplate.update("INSERT INTO good VALUES(?, ?)", review_id, user_id);
+        if(cnt > 0)
+            return true;
+        else
+            return false;
+    }
+
+    @Override
+    public boolean deleteGood(String review_id, String user_id){
+        int cnt = jdbcTemplate.update("DELETE FROM good WHERE review_id=? and user_id=?", review_id, user_id);
+
+        if(cnt > 0)
+            return true;
+        else
+            return false;
+    }
 
 }

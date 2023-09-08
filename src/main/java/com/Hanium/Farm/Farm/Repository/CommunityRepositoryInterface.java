@@ -22,4 +22,10 @@ public interface CommunityRepositoryInterface {
     public ArrayList<SingleComment> getComments(String review_id);
 
     public boolean insertComment(SingleComment comment);
+
+    public boolean removeComment(SingleComment comment);
+
+    public boolean insertGood(String review_id, String user_id);
+
+    public boolean deleteGood(String review_id, String user_id);
 }
