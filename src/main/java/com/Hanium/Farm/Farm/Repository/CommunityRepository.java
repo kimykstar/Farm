@@ -131,6 +131,7 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     public String deleteReview(Review review) {
         int cnt = jdbcTemplate.update("DELETE FROM review WHERE fruit_name=? and id=? and review_time=?", review.getFruit_name(), review.getUser_id(), review.getReview_time());
         jdbcTemplate.update("DELETE FROM good WHERE review_id=? and user_id=?", review.getReview_id(), review.getUser_id());
+        log.info(cnt + "");
         String result = "false";
         if(cnt > 0)
             result = "true";

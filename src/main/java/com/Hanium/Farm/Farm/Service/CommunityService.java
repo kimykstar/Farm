@@ -108,12 +108,10 @@ public class CommunityService {
         review.setReview_time(review.getReview_time().replace(" ", "-"));
         review.setReview_time(review.getReview_time().replace(":", "-"));
         System.out.println(review.getUser_id());
-        review.setUser_id(review.getUser_id().split(":")[1]);
-        System.out.println(review.getUser_id());
         String result = communityRepository.deleteReview(review);
 
         String filename = review.getFruit_name() + "_" + review.getUser_id() + "_" + review.getReview_time() + ".jpg";
-
+        System.out.println("삭제" + result);
         try{
             if(result.equals("true")) {
                 Path path = Paths.get(filePath + filename);

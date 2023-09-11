@@ -54,8 +54,8 @@ public class CommunityController {
     }
 
     @DeleteMapping("deletereview")
-    public String deleteReview(@RequestParam("fruit_name") String fruit_name, @RequestParam("user_id") String user_id, @RequestParam("reviewtime") String reviewTime, @RequestParam("review_id") String review_id){
-        Review review = new Review(fruit_name,  reviewTime, user_id, "", "", review_id, "");
+    public String deleteReview(@RequestParam("fruit_name") String fruit_name, @RequestParam("user_id") String user_id, @RequestParam("reviewtime") String reviewTime){
+        Review review = new Review(fruit_name,  reviewTime, user_id, "", "", "", "");
         String result = communityService.deleteReview(review);
 
 
