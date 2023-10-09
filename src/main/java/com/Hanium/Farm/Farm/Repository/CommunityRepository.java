@@ -38,7 +38,7 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content, flavor)" +
                     "VALUES (?, ?, ?, ?, ?);", fruit_name, review_time, user_id, content, flavor);
         }else{
-            cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content)" +
+            cnt = jdbcTemplate.update("INSERT INTO review(fruit_name, review_time, id, content, flavor)" +
                     "VALUES (?, ?, ?, ?, ?);", fruit_name, review_time, user_id, content, "");
         }
 
@@ -53,7 +53,7 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     // 과일 이름 별 전체 게시물 및 좋아요 받아오기
     @Override
     public ArrayList<Review> getReviewInfo(String fruit_name){;
-        List<Review> result = jdbcTemplate.query("SELECT * FROM review LEFT JOIN good ON review.review_id=good.review_id WHERE fruit_name=? ORDER BY review_time", reviewMapper(), fruit_name);
+        List<Review> result = jdbcTemplate.query("SELECT * FROM review LEFT JOIN good ON review.review_id=good.review_id WHERE fruit_name=? ORDER BY review_time DESC", reviewMapper(), fruit_name);
         ArrayList<Review> reviews = new ArrayList<>();
         reviews.addAll(result);
 
