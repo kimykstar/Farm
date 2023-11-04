@@ -16,7 +16,7 @@ public class ARController {
     // 아래 코드는 본 서버 기준으로 작성된 코드임
     @GetMapping(value = "arimage")
     public String pushARImage(@RequestParam("fruit_name") String fruit_name) throws IOException {
-        String gltfPath = "" + fruit_name + "_side.gltf";
+        String gltfPath = "models/" + fruit_name + "_side.gltf";
 
         String gltfJson = new String(Files.readAllBytes(Paths.get(gltfPath)), StandardCharsets.UTF_8);
         return gltfJson;
@@ -24,7 +24,7 @@ public class ARController {
 
     @GetMapping(value = "arwholeimage")
     public String putARwholeimage(@RequestParam("fruit_name") String fruit_name) throws IOException{
-        String gltfPath = "" + fruit_name + ".gltf";
+        String gltfPath = "models/" + fruit_name + ".gltf";
 
         String gltfJson = new String(Files.readAllBytes(Paths.get(gltfPath)), StandardCharsets.UTF_8);
         return gltfJson;
