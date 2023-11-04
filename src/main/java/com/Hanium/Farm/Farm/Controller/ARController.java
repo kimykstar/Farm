@@ -22,4 +22,12 @@ public class ARController {
         return gltfJson;
     }
 
+    @GetMapping(value = "arwholeimage")
+    public String putARwholeimage(@RequestParam("fruit_name") String fruit_name) throws IOException{
+        String gltfPath = "" + fruit_name + ".gltf";
+
+        String gltfJson = new String(Files.readAllBytes(Paths.get(gltfPath)), StandardCharsets.UTF_8);
+        return gltfJson;
+    }
+
 }
