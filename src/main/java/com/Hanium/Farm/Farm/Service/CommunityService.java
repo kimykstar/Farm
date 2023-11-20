@@ -142,12 +142,12 @@ public class CommunityService {
     public String updateReview(Review review, String fileName)  {
         String result;
 
-        String totalPath = filePath + fileName;
+        String prevPath = filePath + fileName;
         String temp = review.getReview_time().replace(" ", "-").replace(":", "-");
         String name = review.getFruit_name() + "_" + review.getUser_id() + "_" + temp + ".jpg";
-        filePath += name;
+        String totalPath = filePath + name;
         try {
-            Files.move(Path.of(totalPath), Path.of(filePath));
+            Files.move(Path.of(prevPath), Path.of(totalPath));
         }catch(Exception e){
             e.printStackTrace();
         }
