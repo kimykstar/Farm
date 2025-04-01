@@ -15,7 +15,6 @@ public class FruitInfo {
 
     public FruitInfo(String f_name){this.f_name = f_name;}
 
-    // 메소드
     public void setInfoList(ArrayList<Nutrition> infoList) {
         this.infoList = infoList;
     }

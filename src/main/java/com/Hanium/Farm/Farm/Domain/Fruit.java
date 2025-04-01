@@ -10,9 +10,6 @@ public class Fruit {
     private FruitInfo fruitInfo;
     private String file_name;
 
-
-    // constructor ----------------------------
-
     public Fruit(){}
 
     public FruitInfo getFruitInfo() {
@@ -40,8 +37,6 @@ public class Fruit {
         this.sugar = sugar;
         this.fruitInfo = fruitInfo;
     }
-
-    // getter and setter-------------------
 
     public void setFruit_name(String fruit_name) {
         this.fruit_name = fruit_name;

@@ -16,7 +16,6 @@ public class SpringConfig {
 
     @Autowired
     public SpringConfig(DataSource dataSource){
-        // dataSource를 spring bean으로 등록
         this.dataSource = dataSource;
     }
 

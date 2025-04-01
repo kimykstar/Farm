@@ -2,27 +2,25 @@ package com.Hanium.Farm.Farm.Repository;
 
 import com.Hanium.Farm.Farm.Domain.Review;
 import com.Hanium.Farm.Farm.Domain.SingleComment;
-import com.google.gson.Gson;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class CommunityRepository implements CommunityRepositoryInterface{
 
     private final JdbcTemplate jdbcTemplate;
-    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
     public CommunityRepository(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    // Review게시글 등록
     @Override
     public String upload_review(Review review) {
         String fruit_name = review.getFruit_name();
@@ -68,7 +66,6 @@ public class CommunityRepository implements CommunityRepositoryInterface{
             String content = rs.getString("content");
             String flavor = rs.getString("flavor");
             String review_id = rs.getString("review_id");
-            String comment_user_id = rs.getString("user_id");
             String good = rs.getString("user_id");
             if(content != null) // 내용이 있는 경우
                 if(good == null)
@@ -131,7 +128,6 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     public String deleteReview(Review review) {
         int cnt = jdbcTemplate.update("DELETE FROM review WHERE fruit_name=? and id=? and review_time=?", review.getFruit_name(), review.getUser_id(), review.getReview_time());
         jdbcTemplate.update("DELETE FROM good WHERE review_id=? and user_id=?", review.getReview_id(), review.getUser_id());
-        log.info(cnt + "");
         String result = "false";
         if(cnt > 0)
             result = "true";
@@ -150,9 +146,8 @@ public class CommunityRepository implements CommunityRepositoryInterface{
     }
 
     private RowMapper<SingleComment> CommentsMapper() {
-        return (rs, rowNum) -> {
-            return new SingleComment(rs.getString("id"), rs.getString("comment"), rs.getString("post_time"), rs.getString("review_id"));
-        };
+        return (rs, rowNum) ->
+            new SingleComment(rs.getString("id"), rs.getString("comment"), rs.getString("post_time"), rs.getString("review_id"));
     }
 
 

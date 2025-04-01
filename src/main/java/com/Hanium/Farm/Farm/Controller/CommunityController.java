@@ -8,10 +8,6 @@ import com.Hanium.Farm.Farm.Service.CommunityService;
 import com.google.gson.Gson;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Map;
 
 @RestController
 public class CommunityController {
     CommunityService communityService;
-    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Autowired
     public CommunityController(CommunityService communityService){
@@ -64,25 +58,19 @@ public class CommunityController {
 
     // 이미지와 본문 모두 수정한 경우
     @PutMapping("updateimage")
-    public String updateReview(@RequestParam("image") MultipartFile image, @RequestParam("review") String review, @RequestParam String fileName) throws IOException {
-        String flag = "false";
-        flag = communityService.deleteImage(fileName);
-        flag = communityService.registReview(image, review, "update", fileName);
+    public String updateReview(@RequestParam("image") MultipartFile image, @RequestParam("review") String review, @RequestParam String fileName) {
+        communityService.deleteImage(fileName);
+        communityService.registReview(image, review, "update", fileName);
 
-        System.out.println(review);
         return "true";
     }
 
-    // 본문만 수정한 경우
-    // 파일명도 바뀌도록 해야함..
     @PutMapping("updatebody")
     public String updateBodyReview(@RequestBody ReviewPath reviewPath){
-        String flag = "false";
         Review review = reviewPath.getReview();
         String fileName = reviewPath.getFilePath();
-        flag = communityService.updateReview(review, fileName);
 
-        return flag;
+        return communityService.updateReview(review, fileName);
     }
 
     @GetMapping("comments")
@@ -94,24 +82,19 @@ public class CommunityController {
 
     @PostMapping("insertComment")
     public boolean insertComment(HttpServletRequest request) throws IOException{
-        boolean result = false;
-
         ServletInputStream inputStream = request.getInputStream();
 
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
         SingleComment comment = new Gson().fromJson(messageBody, SingleComment.class);
-        result = communityService.insertComment(comment);
 
-        return result;
+        return communityService.insertComment(comment);
     }
 
     @DeleteMapping("removeComment")
     public boolean removeComment(@RequestParam("review_id") String review_id, @RequestParam("user_id") String user_id, @RequestParam("comment") String comment){
         SingleComment com = new SingleComment(user_id, comment, "", review_id);
 
-        boolean result = communityService.removeComment(com);
-
-        return false;
+        return communityService.removeComment(com);
     }
 
     @PostMapping("insertGood")
@@ -121,8 +104,8 @@ public class CommunityController {
         String[] messages = messageBody.split(" ");
         String review_id = messages[0];
         String user_id = messages[1];
-        boolean result = communityService.insertGood(review_id, user_id);
-        return result;
+
+        return communityService.insertGood(review_id, user_id);
     }
 
     @DeleteMapping("deleteGood")

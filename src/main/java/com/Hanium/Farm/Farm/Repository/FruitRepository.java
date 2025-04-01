@@ -1,19 +1,18 @@
 package com.Hanium.Farm.Farm.Repository;
 
 import com.Hanium.Farm.Farm.Domain.*;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.*;
 
+@Repository
 public class FruitRepository implements FruitRepositoryInterface{
 
     private final JdbcTemplate jdbcTemplate;
-    Log log = LogFactory.getLog(FruitRepository.class);
     @Autowired
     public FruitRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -29,14 +28,10 @@ public class FruitRepository implements FruitRepositoryInterface{
     }
 
     private RowMapper<Fruit> pwRowMapper(FruitInfo fruitInfo){
-        return (rs, rowNum) -> {
-            Fruit fruit = null;
-            fruit = new Fruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getString("calories"),
+        return (rs, rowNum) ->
+            new Fruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getString("calories"),
                     rs.getString("carbohydrate"), rs.getString("protein"),
                     rs.getString("fat"), rs.getString("sugar"), fruitInfo);
-
-            return fruit;
-        };
     }
 
     @Override
@@ -45,6 +40,7 @@ public class FruitRepository implements FruitRepositoryInterface{
         ArrayList<Nutrition> temp = new ArrayList<>(i);
         FruitInfo infos = new FruitInfo(fruit);
         infos.setInfoList(temp);
+
         return infos;
     }
 
@@ -56,6 +52,7 @@ public class FruitRepository implements FruitRepositoryInterface{
             String type = rs.getString("n_type");
             String effect = rs.getString("effective");
             Nutrition info = new Nutrition(nutrition, unit, amount, type, effect);
+
             return info;
         };
     }
@@ -65,20 +62,17 @@ public class FruitRepository implements FruitRepositoryInterface{
     public ArrayList<PeriodFruit> getPeriodFruit(int month) {
         List<PeriodFruit> fruits = jdbcTemplate.query("SELECT period.fruit_name, fruits.file_name, period.start, period.end FROM period INNER JOIN fruits ON fruits.fruit_name=period.fruit_name WHERE start <= ? and end >= ?;", peRowMapper(), month, month);
         ArrayList<PeriodFruit> result = new ArrayList<>(fruits);
+
         return result;
     }
 
     private RowMapper<PeriodFruit> peRowMapper(){
-        return (rs, rowNum) -> {
-            return new PeriodFruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getInt("start"), rs.getInt("end"));
-        };
+        return (rs, rowNum) -> new PeriodFruit(rs.getString("fruit_name"), rs.getString("file_name"), rs.getInt("start"), rs.getInt("end"));
     }
 
-    // 사용자 추천 과일
     @Override
     public ArrayList<RecommendFruit> getRecommendFruit(String[] nutritions) {
         ArrayList<RecommendFruit> result = new ArrayList<>();
-        // 한 영양소에 대한 과일의 정보 배열을 받는다.
         for(String s : nutritions){
             List<RecommendFruit> fruits =
                     jdbcTemplate.query("SELECT fruits.fruit_name, file_name, nutrition, amount, unit FROM fruits LEFT JOIN fn_table " +
@@ -108,9 +102,7 @@ public class FruitRepository implements FruitRepositoryInterface{
     }
 
     private RowMapper<String> fruitnameMapper(){
-        return (rs, rowNum) ->{
-            return rs.getString("fruit_name");
-        };
+        return (rs, rowNum) -> rs.getString("fruit_name");
     }
 
     @Override
@@ -121,7 +113,7 @@ public class FruitRepository implements FruitRepositoryInterface{
                 "as t1 ON review.review_id=t1.review_id", hotFruitMapper(), null);
         Set<String> sets = new LinkedHashSet<>();
         Iterator<String> it = names.iterator();
-        // Set 길이가 3이 될때까지 or names이 요소 순회를 다 마친 경우까지 반복
+
         while(it.hasNext() && sets.size() <= 3)
             sets.add(it.next());
 
@@ -131,8 +123,6 @@ public class FruitRepository implements FruitRepositoryInterface{
     }
 
     private RowMapper<String> hotFruitMapper(){
-        return (rs, rowNum)->{
-            return rs.getString("fruit_name");
-        };
+        return (rs, rowNum)-> rs.getString("fruit_name");
     }
 }

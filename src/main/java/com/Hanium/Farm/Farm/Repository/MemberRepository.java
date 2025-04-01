@@ -3,13 +3,13 @@ package com.Hanium.Farm.Farm.Repository;
 import com.Hanium.Farm.Farm.Domain.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class MemberRepository implements MemberRepositoryInterface {
 
     private final JdbcTemplate jdbcTemplate;
@@ -26,8 +26,6 @@ public class MemberRepository implements MemberRepositoryInterface {
 
     @Override
     public void join(Member member) {
-        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-
         jdbcTemplate.update(
                 "INSERT INTO user VALUES (?, ?, ?, ?, ?);"
                 , member.getId(), member.getPw(), member.getName(), member.getPhone(), member.getAge());
@@ -41,11 +39,12 @@ public class MemberRepository implements MemberRepositoryInterface {
     @Override
     public boolean delete(String id) {
         int count = jdbcTemplate.update("DELETE FROM user WHERE id = ?", id);
-        boolean result = false;
+        boolean result;
         if(count == 0){
             result = false;
         }else
             result = true;
+
         return result;
     }
 
@@ -54,21 +53,19 @@ public class MemberRepository implements MemberRepositoryInterface {
         List<String> result = jdbcTemplate.query("SELECT * FROM user WHERE id = ?", pwRowMapper(), id);
         String memberInfo = result.get(0);
         String[] info = memberInfo.split(" ");
-        Member member = new Member(info[0], info[1], info[2], info[3], Integer.parseInt(info[4]));
-        return member; // indexOutOfBoundsException에러 잡기
+
+        return new Member(info[0], info[1], info[2], info[3], Integer.parseInt(info[4]));
     }
 
     private RowMapper<String> pwRowMapper(){
         return (rs, rowNum) -> {
-            String result = null;
-            StringBuilder temp = null;
-            temp = new StringBuilder(rs.getString("id"));
+            StringBuilder temp = new StringBuilder(rs.getString("id"));
             temp.append(" " + rs.getString("pw"));
             temp.append(" " + rs.getString("name"));
             temp.append(" " + rs.getString("phone_num"));
             temp.append(" " + rs.getString("age"));
-            result = temp.toString();
-            return result;
+
+            return temp.toString();
         };
     }
 }

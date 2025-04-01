@@ -5,8 +5,6 @@ import com.Hanium.Farm.Farm.Service.MemberService;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +15,12 @@ import java.nio.charset.StandardCharsets;
 @RestController
 public class MemberController {
     MemberService memberService;
-    Log log = LogFactory.getLog(MemberController.class);
     @Autowired
     public MemberController(MemberService memberService){
         this.memberService = memberService;
     }
     @PostMapping(value = "login")
     public boolean login(HttpServletRequest request, HttpSession session) throws IOException {
-        // Http의 Body부분에서 데이터를 받는다.
         ServletInputStream inputStream = request.getInputStream();
 
         String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
@@ -34,10 +30,9 @@ public class MemberController {
 
 
         boolean result = false;
-        // 여기서 memberService이용
         try{
             result = memberService.login(id, pw);
-            if(result == true){
+            if(result){
                 session.setAttribute("user", id);
                 System.out.println(session.getAttribute("user"));
             }else{
@@ -77,9 +72,7 @@ public class MemberController {
 
     @GetMapping(value="/delete")
     public boolean delete(@RequestParam String id){
-        boolean result = memberService.delete(id);
-
-        return result;
+        return memberService.delete(id);
     }
 
 }

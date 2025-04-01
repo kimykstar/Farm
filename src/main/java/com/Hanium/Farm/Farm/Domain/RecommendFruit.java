@@ -29,5 +29,6 @@ public class RecommendFruit {
     }
 
     public String getNutrition_amount(){return nutrition_amount;}
+
     public String getUnit(){return unit;}
 }

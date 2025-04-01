@@ -34,7 +34,6 @@ public class Review {
 
     public Review(){}
 
-    // 이미지 이름은 DB로부터 게시물 ID와 user_id, fruit_name을 합쳐서 할 예정
     public Review(String fruit_name, String review_time, String user_id, String content, String flavor, String review_id, String good) {
         this.fruit_name = fruit_name;
         this.review_time = review_time;

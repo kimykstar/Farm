@@ -6,8 +6,6 @@ import com.Hanium.Farm.Farm.Domain.RecommendFruit;
 import com.Hanium.Farm.Farm.Service.FruitService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,29 +30,25 @@ public class FruitController {
         Fruit info = fruitService.getFruitInfo(fruit);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        String temp = gson.toJson(info);
-        return temp;
+        return gson.toJson(info);
     }
 
     @GetMapping("/period")
     @ResponseBody
     public ArrayList<PeriodFruit> getPeriodFruits(@RequestParam int month){
-        ArrayList<PeriodFruit> fruits =  fruitService.getPeriodFruits(month);
-        return fruits;
+        return fruitService.getPeriodFruits(month);
     }
 
     @GetMapping("/recommend")
     @ResponseBody
     public ArrayList<RecommendFruit> recommendFruit(@RequestParam String[] nutrition){
-        ArrayList<RecommendFruit> fruits = fruitService.getRecommendFruits(nutrition);
-        return fruits;
+        return fruitService.getRecommendFruits(nutrition);
     }
 
     @GetMapping("/fruitnames")
     @ResponseBody
     public ArrayList<String> getFruitNames(){
-        ArrayList<String> names = fruitService.getFruitNames();
-        return names;
+        return fruitService.getFruitNames();
     }
 
     // 과일의 이름을 띄어쓰기를 구분자로 해서 받는다.
