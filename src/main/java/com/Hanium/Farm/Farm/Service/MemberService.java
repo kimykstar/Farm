@@ -1,12 +1,14 @@
 package com.Hanium.Farm.Farm.Service;
 
 import com.Hanium.Farm.Farm.Domain.Member;
+import com.Hanium.Farm.Farm.Dto.AuthTokens;
 import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Optional;
 
 public class MemberService {
     MemberRepositoryInterface memberRepository;
@@ -16,17 +18,17 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public boolean login(String id, String pw) throws NoSuchAlgorithmException {
-        boolean result = false;
-
-        // 여기 memberRepository이용
+    public Optional<AuthTokens> login(String id, String pw) {
         Member member = memberRepository.getMember(id);
         String hash_pw = member.getPw();
 
-        if(pw.equals(hash_pw))
-            result = true;
+        if(pw.equals(hash_pw)) {
+            String accessToken = "access";
+            String refreshToken = "refresh";
+            return Optional.of(new AuthTokens(accessToken, refreshToken));
+        }
 
-        return result;
+        return Optional.empty();
     }
 
     public void join(Member member){
