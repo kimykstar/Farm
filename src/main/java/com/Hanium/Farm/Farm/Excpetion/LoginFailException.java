@@ -1,4 +1,4 @@
-package com.Hanium.Farm.Farm.Exception;
+package com.Hanium.Farm.Farm.Excpetion;
 
 import lombok.Getter;
 
