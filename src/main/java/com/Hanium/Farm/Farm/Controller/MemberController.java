@@ -29,7 +29,6 @@ public class MemberController {
                 .orElseThrow(LoginFailException::new);
 
         return ResponseEntity.ok(
-
                 new LoginResponse(
                         tokens.accessToken(),
                         tokens.refreshToken()
