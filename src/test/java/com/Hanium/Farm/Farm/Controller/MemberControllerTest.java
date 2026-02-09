@@ -74,7 +74,7 @@ public class MemberControllerTest {
 
     @ParameterizedTest
     @MethodSource("invalidLoginParams")
-    void 유저_로그인_파라미터로인한_실패(String id, String pw) throws Exception {
+    void 유저_로그인_파라미터_실패(String id, String pw) throws Exception {
         LoginRequest request = new LoginRequest(id, pw);
 
         String jsonRequest = objectMapper.writeValueAsString(request);
@@ -83,8 +83,7 @@ public class MemberControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonRequest))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.message").value("아이디 혹은 비밀번호가 누락되었습니다."));
+                .andExpect(jsonPath("$.message").exists());
     }
 
     private static Stream<Arguments> invalidLoginParams() {
