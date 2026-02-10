@@ -1,7 +1,9 @@
-package com.Hanium.Farm.Farm.ControllerAdivce;
+package com.Hanium.Farm.Farm.Advices;
 
+import com.Hanium.Farm.Farm.Dto.GlobalExceptionResponse;
 import com.Hanium.Farm.Farm.Dto.LoginFailResponse;
-import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,12 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public class MemberControllerAdvice {
+public class GlobalAdvice {
 
-    @ExceptionHandler(LoginFailException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public LoginFailResponse handleLoginFail(LoginFailException e) {
-        return new LoginFailResponse(e.getMessage());
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public GlobalExceptionResponse globalExceptionHandler(Exception e) {
+        return new GlobalExceptionResponse(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
