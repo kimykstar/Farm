@@ -1,28 +1,25 @@
 package com.Hanium.Farm.Farm.Service;
 
-import com.Hanium.Farm.Farm.Domain.Member;
 import com.Hanium.Farm.Farm.Dto.AuthTokens;
+import com.Hanium.Farm.Farm.Dto.LoginRequest;
+import com.Hanium.Farm.Farm.Dto.SignUpRequest;
 import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.Hanium.Farm.Farm.Vo.Member;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
 public class MemberService {
     MemberRepositoryInterface memberRepository;
 
-    @Autowired
     public MemberService(MemberRepositoryInterface memberRepository){
         this.memberRepository = memberRepository;
     }
 
-    public Optional<AuthTokens> login(String id, String pw) {
-        Member member = memberRepository.getMember(id);
-        String hash_pw = member.getPw();
+    public Optional<AuthTokens> login(LoginRequest request) {
+        Member member = memberRepository.getMember(request.id());
+        String hash_pw = member.pw();
 
-        if(pw.equals(hash_pw)) {
+        if(request.pw().equals(hash_pw)) {
             String accessToken = "access";
             String refreshToken = "refresh";
             return Optional.of(new AuthTokens(accessToken, refreshToken));
@@ -31,17 +28,9 @@ public class MemberService {
         return Optional.empty();
     }
 
-    public void join(Member member){
-//        boolean result = false;
-        memberRepository.join(member);
-//        return result;
-    }
-
-    public String getPw(String id){
-        String pw;
-        Member member = memberRepository.getMember(id);
-        pw = member.getPw();
-        return pw;
+    public boolean join(SignUpRequest request){
+        Member member = new Member(request.id(), request.pw(), request.name(), request.phone(), request.age());
+        return memberRepository.join(member);
     }
 
     public boolean delete(String id){

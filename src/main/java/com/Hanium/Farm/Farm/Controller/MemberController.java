@@ -1,20 +1,15 @@
 package com.Hanium.Farm.Farm.Controller;
 
-import com.Hanium.Farm.Farm.Domain.Member;
-import com.Hanium.Farm.Farm.Dto.AuthTokens;
-import com.Hanium.Farm.Farm.Dto.LoginRequest;
-import com.Hanium.Farm.Farm.Dto.LoginResponse;
+import com.Hanium.Farm.Farm.Dto.*;
+import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
+import com.Hanium.Farm.Farm.Excpetion.SignUpFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
-import jakarta.servlet.ServletInputStream;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @RestController
 public class MemberController {
@@ -23,10 +18,11 @@ public class MemberController {
     public MemberController(MemberService memberService){
         this.memberService = memberService;
     }
+
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        AuthTokens tokens = memberService.login(request.id(), request.pw())
-                .orElseThrow(LoginFailException::new);
+        AuthTokens tokens = memberService.login(request)
+                .orElseThrow(() -> new LoginFailException(ErrorMessage.LOGIN_FAIL));
 
         return ResponseEntity.ok(
                 new LoginResponse(
@@ -36,29 +32,16 @@ public class MemberController {
         );
     }
 
-    @PostMapping(value = "join")
-    public boolean join(HttpServletRequest request) throws IOException{
-        ServletInputStream inputStream = request.getInputStream();
+    @PostMapping(value = "/join")
+    public ResponseEntity<SignUpResponse> join(@Valid @RequestBody SignUpRequest request) {
+        boolean result = memberService.join(request);
 
-        String messageBody = StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-        String[] user = messageBody.split(" ");
-        String id = user[0];
-        String pw = user[1];
-
-        String name = user[2];
-        String phone = user[3];
-
-        int age = Integer.parseInt(user[4]);
-
-        Member m = new Member(id, pw, name, phone, age);
-
-        try{
-            memberService.join(m);
-        }catch(Exception e){
-            e.printStackTrace();
+        if (result) {
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new SignUpResponse("회원가입에 성공했습니다."));
         }
 
-        return true;
+        throw new SignUpFailException(ErrorMessage.SIGNUP_FAIL);
     }
 
     @GetMapping(value="/delete")
