@@ -25,11 +25,6 @@ public class SpringConfig {
     }
 
     @Bean
-    public MemberService memberService(){
-        return new MemberService(memberRepositoryInterface());
-    }
-
-    @Bean
     public FruitRepositoryInterface fruitRepositoryInterface(){return new FruitRepository(dataSource);}
 
     @Bean
