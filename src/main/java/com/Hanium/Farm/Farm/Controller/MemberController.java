@@ -2,7 +2,6 @@ package com.Hanium.Farm.Farm.Controller;
 
 import com.Hanium.Farm.Farm.Dto.*;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
-import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import com.Hanium.Farm.Farm.Excpetion.SignUpFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
 import jakarta.validation.Valid;
@@ -21,15 +20,12 @@ public class MemberController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        AuthTokens tokens = memberService.login(request)
-                .orElseThrow(() -> new LoginFailException(ErrorMessage.LOGIN_FAIL));
+        AuthTokens tokens = memberService.login(request);
 
-        return ResponseEntity.ok(
-                new LoginResponse(
-                        tokens.accessToken(),
-                        tokens.refreshToken()
-                )
-        );
+        return ResponseEntity.ok()
+                .header("Authorization", tokens.accessToken())
+                .header("X-Refresh-Token", tokens.refreshToken())
+                .build();
     }
 
     @PostMapping(value = "/join")
