@@ -2,6 +2,8 @@ package com.Hanium.Farm.Farm.Controller;
 
 import com.Hanium.Farm.Farm.Dto.LoginRequest;
 import com.Hanium.Farm.Farm.Dto.SignUpRequest;
+import com.Hanium.Farm.Farm.Enums.ErrorMessage;
+import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
 import com.Hanium.Farm.Farm.Dto.AuthTokens;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -37,7 +38,7 @@ public class MemberControllerTest {
     @Test
     void 유저_로그인_성공() throws Exception {
         given(memberService.login(any()))
-                .willReturn(Optional.of(new AuthTokens("access", "refresh")));
+                .willReturn(new AuthTokens("access", "refresh"));
 
         mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -48,17 +49,14 @@ public class MemberControllerTest {
                   }
                 """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.accessToken").exists())
-                .andExpect(jsonPath("$.refreshToken").exists())
-                .andExpect(jsonPath("$.accessToken").isNotEmpty())
-                .andExpect(jsonPath("$.refreshToken").isNotEmpty()
-                );
+                .andExpect(header().exists("Authorization"))
+                .andExpect(header().exists("X-Refresh-Token"));
     }
 
     @Test
     void 유저_로그인_실패() throws Exception {
         given(memberService.login(any()))
-                .willReturn(Optional.empty());
+                .willThrow(new LoginFailException(ErrorMessage.LOGIN_FAIL));
 
         mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
