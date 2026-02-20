@@ -2,7 +2,10 @@ package com.Hanium.Farm.Farm.Enums;
 
 public enum ErrorMessage {
     LOGIN_FAIL("아이디 혹은 비밀번호가 올바르지 않습니다."),
-    SIGNUP_FAIL("회원가입에 실패했습니다.");
+    SIGNUP_FAIL("회원가입에 실패했습니다."),
+    ACCESS_TOKEN_EXPIRED("엑세스 토큰이 만료되었습니다."),
+    INVALID_SIGNATURE("시그니쳐 무결성 위반"),
+    TOKEN_IS_NOT_EXIST("로그인이 필요합니다.");
 
     private final String message;
 
