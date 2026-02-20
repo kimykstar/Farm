@@ -1,5 +1,6 @@
 package com.Hanium.Farm.Farm.Controller;
 
+import com.Hanium.Farm.Farm.Components.JwtProvider;
 import com.Hanium.Farm.Farm.Dto.LoginRequest;
 import com.Hanium.Farm.Farm.Dto.SignUpRequest;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
@@ -34,6 +35,8 @@ public class MemberControllerTest {
 
     @MockBean
     private MemberService memberService;
+    @MockBean
+    private JwtProvider jwtProvider;
 
     @Test
     void 유저_로그인_성공() throws Exception {
