@@ -1,39 +1,29 @@
 package com.Hanium.Farm.Farm.Repository;
 
-import com.Hanium.Farm.Farm.Domain.Member;
+import com.Hanium.Farm.Farm.Vo.Member;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class MemberRepository implements MemberRepositoryInterface {
 
     private final JdbcTemplate jdbcTemplate;
 
-    // jdbc template 생성자로 생성
     public MemberRepository(DataSource dataSource){
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
-    public Optional<Member> findMemberById(String id) {
-        return null;
-    }
-
-    @Override
-    public void join(Member member) {
-        jdbcTemplate.update(
+    public boolean join(Member member) {
+        int result = jdbcTemplate.update(
                 "INSERT INTO user VALUES (?, ?, ?, ?, ?);"
-                , member.getId(), member.getPw(), member.getName(), member.getPhone(), member.getAge());
-    }
+                , member.id(), member.pw(), member.name(), member.phone(), member.age());
 
-    @Override
-    public boolean update(Member member) {
-        return false;
+        return result == 1;
     }
 
     @Override

@@ -1,9 +1,8 @@
-package com.Hanium.Farm.Farm;
+package com.Hanium.Farm.Farm.Configurations;
 
 import com.Hanium.Farm.Farm.Repository.*;
 import com.Hanium.Farm.Farm.Service.CommunityService;
 import com.Hanium.Farm.Farm.Service.FruitService;
-import com.Hanium.Farm.Farm.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,11 +24,6 @@ public class SpringConfig {
     }
 
     @Bean
-    public MemberService memberService(){
-        return new MemberService(memberRepositoryInterface());
-    }
-
-    @Bean
     public FruitRepositoryInterface fruitRepositoryInterface(){return new FruitRepository(dataSource);}
 
     @Bean
@@ -39,5 +33,4 @@ public class SpringConfig {
     public CommunityRepositoryInterface communityRepositoryInterface(){return new CommunityRepository(dataSource);}
     @Bean
     public CommunityService communityService(){return new CommunityService(communityRepositoryInterface());}
-
 }

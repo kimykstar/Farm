@@ -1,45 +1,39 @@
 package com.Hanium.Farm.Farm.Service;
 
-import com.Hanium.Farm.Farm.Domain.Member;
+import com.Hanium.Farm.Farm.Components.JwtProvider;
+import com.Hanium.Farm.Farm.Dto.AuthTokens;
+import com.Hanium.Farm.Farm.Dto.LoginRequest;
+import com.Hanium.Farm.Farm.Dto.SignUpRequest;
+import com.Hanium.Farm.Farm.Enums.ErrorMessage;
+import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.Hanium.Farm.Farm.Vo.Member;
+import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
+@Service
 public class MemberService {
     MemberRepositoryInterface memberRepository;
+    JwtProvider jwtProvider;
 
-    @Autowired
-    public MemberService(MemberRepositoryInterface memberRepository){
+    public MemberService(MemberRepositoryInterface memberRepository, JwtProvider jwtProvider){
         this.memberRepository = memberRepository;
+        this.jwtProvider = jwtProvider;
     }
 
-    public boolean login(String id, String pw) throws NoSuchAlgorithmException {
-        boolean result = false;
+    public AuthTokens login(LoginRequest request) {
+        Member member = memberRepository.getMember(request.id());
 
-        // 여기 memberRepository이용
-        Member member = memberRepository.getMember(id);
-        String hash_pw = member.getPw();
+        if (!request.pw().equals(member.pw())) throw new LoginFailException(ErrorMessage.LOGIN_FAIL);
 
-        if(pw.equals(hash_pw))
-            result = true;
-
-        return result;
+        String accessToken = jwtProvider.createAccessToken(request.id());
+        String refreshToken = jwtProvider.createRefreshToken(request.id());
+        return new AuthTokens(accessToken, refreshToken);
     }
 
-    public void join(Member member){
-//        boolean result = false;
-        memberRepository.join(member);
-//        return result;
-    }
-
-    public String getPw(String id){
-        String pw;
-        Member member = memberRepository.getMember(id);
-        pw = member.getPw();
-        return pw;
+    public boolean join(SignUpRequest request){
+        Member member = new Member(request.id(), request.pw(), request.name(), request.phone(), request.age());
+        return memberRepository.join(member);
     }
 
     public boolean delete(String id){
