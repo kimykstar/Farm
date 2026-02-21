@@ -9,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import java.io.IOException;
-
 @Component
 @RequiredArgsConstructor
 public class TokenInterceptor implements HandlerInterceptor {
@@ -18,7 +16,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     private final JwtProvider jwtProvider;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String accessToken = request.getHeader("Authorization");
 
         if (accessToken == null) throw new TokenNotExistException(ErrorMessage.TOKEN_IS_NOT_EXIST);

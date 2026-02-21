@@ -12,15 +12,22 @@ import java.util.Date;
 
 @Component
 public class JwtProvider {
-
-    @Value("${spring.jwt.token.secret.key}")
     private String privateKey;
-    @Value("${spring.jwt.access-token.validation.time}")
     private long accessTokenExpireTime;
-    @Value("${spring.jwt.refresh-token.validation.time}")
     private long refreshTokenExpireTime;
+    private Key key;
 
-    private final Key key = Keys.hmacShaKeyFor(privateKey.getBytes());
+    public JwtProvider(
+            @Value("${spring.jwt.token.secret.key}") String privateKey,
+            @Value("${spring.jwt.access-token.validation.time}") long accessTokenExpireTime,
+            @Value("${spring.jwt.refresh-token.validation.time}") long refreshTokenExpireTime
+    ) {
+        this.privateKey = privateKey;
+        this.accessTokenExpireTime = accessTokenExpireTime;
+        this.refreshTokenExpireTime = refreshTokenExpireTime;
+
+        this.key = Keys.hmacShaKeyFor(privateKey.getBytes());
+    }
 
     public String createAccessToken(String id) {
         Date now = new Date();
