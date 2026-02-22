@@ -7,36 +7,53 @@ import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
 import com.Hanium.Farm.Farm.Dto.AuthTokens;
+import com.Hanium.Farm.Farm.Support.Fixture.TokenFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.security.Key;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(MemberController.class)
+@ActiveProfiles("test")
+@Import(JwtProvider.class)
 public class MemberControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
+    @Value("${spring.jwt.token.secret.key}")
+    private String privateKey;
     @MockBean
     private MemberService memberService;
-    @MockBean
-    private JwtProvider jwtProvider;
+    private Key key;
+    private TokenFixture tokenFixture;
+
+    @BeforeEach
+    void setUp() {
+        this.key = Keys.hmacShaKeyFor(privateKey.getBytes());
+        this.tokenFixture = new TokenFixture(key);
+    }
 
     @Test
     void 유저_로그인_성공() throws Exception {
@@ -171,5 +188,18 @@ public class MemberControllerTest {
                         27
                 )
         );
+    }
+
+    @Test
+    void 토큰_재발급_성공_테스트() throws Exception {
+        String accessToken = this.tokenFixture.createExpiredToken("yk");
+        String refreshToken = this.tokenFixture.createValidToken("yk");
+
+        mockMvc.perform(get("/refresh")
+                .header("Authorization", accessToken)
+                .header("X-RefreshToken", refreshToken))
+                .andExpect(status().isOk())
+                .andExpect(header().exists("Authorization"))
+                .andExpect(header().exists("X-Refresh-Token"));
     }
 }
