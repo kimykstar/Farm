@@ -1,6 +1,6 @@
 package com.Hanium.Farm.Farm.Controller;
 
-import com.Hanium.Farm.Farm.Dto.*;
+import com.Hanium.Farm.Farm.Dto.Auth.*;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.SignUpFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
@@ -45,4 +45,14 @@ public class MemberController {
         return memberService.delete(id);
     }
 
+    @GetMapping(value="/refresh")
+    public ResponseEntity<AuthTokens> refreshTokens(@RequestHeader("X-Refresh-Token") String refreshToken) {
+            AuthTokens tokens = memberService.refreshToken(refreshToken);
+
+            return ResponseEntity.ok()
+                    .header("Authorization", tokens.accessToken())
+                    .header("X-Refresh-Token", tokens.refreshToken())
+                    .body(tokens);
+
+    }
 }

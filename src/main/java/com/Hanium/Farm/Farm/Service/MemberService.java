@@ -1,13 +1,14 @@
 package com.Hanium.Farm.Farm.Service;
 
 import com.Hanium.Farm.Farm.Components.JwtProvider;
-import com.Hanium.Farm.Farm.Dto.AuthTokens;
-import com.Hanium.Farm.Farm.Dto.LoginRequest;
-import com.Hanium.Farm.Farm.Dto.SignUpRequest;
+import com.Hanium.Farm.Farm.Dto.Auth.AuthTokens;
+import com.Hanium.Farm.Farm.Dto.Auth.LoginRequest;
+import com.Hanium.Farm.Farm.Dto.Auth.SignUpRequest;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import com.Hanium.Farm.Farm.Repository.MemberRepositoryInterface;
 import com.Hanium.Farm.Farm.Vo.Member;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -15,10 +16,12 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     MemberRepositoryInterface memberRepository;
     JwtProvider jwtProvider;
+    RedisTemplate<String, String> redisTemplate;
 
-    public MemberService(MemberRepositoryInterface memberRepository, JwtProvider jwtProvider){
+    public MemberService(MemberRepositoryInterface memberRepository, JwtProvider jwtProvider, RedisTemplate<String, String> redisTemplate){
         this.memberRepository = memberRepository;
         this.jwtProvider = jwtProvider;
+        this.redisTemplate = redisTemplate;
     }
 
     public AuthTokens login(LoginRequest request) {
@@ -28,6 +31,9 @@ public class MemberService {
 
         String accessToken = jwtProvider.createAccessToken(request.id());
         String refreshToken = jwtProvider.createRefreshToken(request.id());
+
+        redisTemplate.opsForValue().set(request.id(), refreshToken);
+        
         return new AuthTokens(accessToken, refreshToken);
     }
 
@@ -39,5 +45,15 @@ public class MemberService {
     public boolean delete(String id){
         boolean result = memberRepository.delete(id);
         return result;
+    }
+
+    public AuthTokens refreshToken(String refreshToken) {
+        if (!jwtProvider.validateToken(refreshToken)) {
+            throw new LoginFailException(ErrorMessage.LOGIN_FAIL);
+        }
+        String userId = jwtProvider.getUserId(refreshToken);
+        String newAccessToken = jwtProvider.createAccessToken(userId);
+
+        return new AuthTokens(newAccessToken, refreshToken);
     }
 }

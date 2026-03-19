@@ -1,7 +1,7 @@
 package com.Hanium.Farm.Farm.Advices;
 
-import com.Hanium.Farm.Farm.Dto.ExpiredTokenResponse;
-import com.Hanium.Farm.Farm.Dto.TokenNotExistResponse;
+import com.Hanium.Farm.Farm.Dto.Auth.ExpiredTokenResponse;
+import com.Hanium.Farm.Farm.Dto.Auth.TokenNotExistResponse;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.TokenNotExistException;
 import io.jsonwebtoken.ExpiredJwtException;

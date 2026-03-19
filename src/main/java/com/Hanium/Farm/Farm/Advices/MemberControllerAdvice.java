@@ -1,7 +1,7 @@
 package com.Hanium.Farm.Farm.Advices;
 
 import com.Hanium.Farm.Farm.Controller.MemberController;
-import com.Hanium.Farm.Farm.Dto.LoginFailResponse;
+import com.Hanium.Farm.Farm.Dto.Auth.LoginFailResponse;
 import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
