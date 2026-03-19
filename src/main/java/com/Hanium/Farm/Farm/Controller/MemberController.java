@@ -45,4 +45,14 @@ public class MemberController {
         return memberService.delete(id);
     }
 
+    @GetMapping(value="/refresh")
+    public ResponseEntity<AuthTokens> refreshTokens(@RequestHeader("X-Refresh-Token") String refreshToken) {
+            AuthTokens tokens = memberService.refreshToken(refreshToken);
+
+            return ResponseEntity.ok()
+                    .header("Authorization", tokens.accessToken())
+                    .header("X-Refresh-Token", tokens.refreshToken())
+                    .body(tokens);
+
+    }
 }

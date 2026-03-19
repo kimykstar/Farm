@@ -28,6 +28,8 @@ public class MemberService {
 
         String accessToken = jwtProvider.createAccessToken(request.id());
         String refreshToken = jwtProvider.createRefreshToken(request.id());
+        // Redis저장 로직 넣어야 함
+        
         return new AuthTokens(accessToken, refreshToken);
     }
 
@@ -39,5 +41,15 @@ public class MemberService {
     public boolean delete(String id){
         boolean result = memberRepository.delete(id);
         return result;
+    }
+
+    public AuthTokens refreshToken(String refreshToken) {
+        if (!jwtProvider.validateToken(refreshToken)) {
+            throw new LoginFailException(ErrorMessage.LOGIN_FAIL);
+        }
+        String userId = jwtProvider.getUserId(refreshToken);
+        String newAccessToken = jwtProvider.createAccessToken(userId);
+
+        return new AuthTokens(newAccessToken, refreshToken);
     }
 }
