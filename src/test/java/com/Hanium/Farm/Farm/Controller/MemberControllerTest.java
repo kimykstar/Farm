@@ -192,12 +192,13 @@ public class MemberControllerTest {
 
     @Test
     void 토큰_재발급_성공_테스트() throws Exception {
-        String accessToken = this.tokenFixture.createExpiredToken("yk");
+        String accessToken = this.tokenFixture.createValidToken("yk");
         String refreshToken = this.tokenFixture.createValidToken("yk");
+        given(memberService.refreshToken(any()))
+                .willReturn(new AuthTokens(accessToken, refreshToken));
 
         mockMvc.perform(get("/refresh")
-                .header("Authorization", accessToken)
-                .header("X-RefreshToken", refreshToken))
+                .header("X-Refresh-Token", refreshToken))
                 .andExpect(status().isOk())
                 .andExpect(header().exists("Authorization"))
                 .andExpect(header().exists("X-Refresh-Token"));
