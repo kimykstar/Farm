@@ -1,6 +1,6 @@
 package com.Hanium.Farm.Farm.Advices;
 
-import com.Hanium.Farm.Farm.Dto.SignUpFailResponse;
+import com.Hanium.Farm.Farm.Dto.Auth.SignUpFailResponse;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;

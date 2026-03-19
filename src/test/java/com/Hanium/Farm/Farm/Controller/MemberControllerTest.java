@@ -1,12 +1,12 @@
 package com.Hanium.Farm.Farm.Controller;
 
 import com.Hanium.Farm.Farm.Components.JwtProvider;
-import com.Hanium.Farm.Farm.Dto.LoginRequest;
-import com.Hanium.Farm.Farm.Dto.SignUpRequest;
+import com.Hanium.Farm.Farm.Dto.Auth.LoginRequest;
+import com.Hanium.Farm.Farm.Dto.Auth.SignUpRequest;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.LoginFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
-import com.Hanium.Farm.Farm.Dto.AuthTokens;
+import com.Hanium.Farm.Farm.Dto.Auth.AuthTokens;
 import com.Hanium.Farm.Farm.Support.Fixture.TokenFixture;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.security.Keys;

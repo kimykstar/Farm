@@ -1,4 +1,4 @@
-package com.Hanium.Farm.Farm.Dto;
+package com.Hanium.Farm.Farm.Dto.Auth;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

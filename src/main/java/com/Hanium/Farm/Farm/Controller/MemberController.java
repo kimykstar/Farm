@@ -1,6 +1,6 @@
 package com.Hanium.Farm.Farm.Controller;
 
-import com.Hanium.Farm.Farm.Dto.*;
+import com.Hanium.Farm.Farm.Dto.Auth.*;
 import com.Hanium.Farm.Farm.Enums.ErrorMessage;
 import com.Hanium.Farm.Farm.Excpetion.SignUpFailException;
 import com.Hanium.Farm.Farm.Service.MemberService;
